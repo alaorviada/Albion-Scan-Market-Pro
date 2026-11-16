@@ -1,0 +1,1134 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1110">
+<meta name="description" content="Scanner de crafting para Albion Online: compara el coste de fabricación con las órdenes de compra del Mercado Negro de Caerleon.">
+<title>Albion Scan Market · Pro 10.3</title>
+<style>
+:root{color-scheme:dark;--bg:#0b100e;--surface:#121b17;--surface2:#19251e;--surface3:#202e26;--line:#2b3b31;--text:#edf5ee;--muted:#9eafa2;--gold:#e6c36f;--green:#85d39a;--red:#f18b82;--blue:#8bc8ed;--amber:#efc878;--radius:17px;--shadow:0 16px 45px #0003}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 75% -20%,#33472f 0,transparent 37%),var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}button,input,select{font:inherit}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}.app{max-width:1540px;margin:auto;padding:clamp(13px,2.5vw,34px)}
+header{display:flex;align-items:center;gap:14px;margin-bottom:19px}.logo{width:50px;height:50px;flex:0 0 50px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#ffe8a3,#ae7e2d);box-shadow:0 9px 28px #0006;color:#211a0d;font-size:27px;font-weight:1000}.brand h1{margin:0;font-size:clamp(23px,3vw,34px);line-height:1.08;letter-spacing:-.9px}.brand p{margin:5px 0 0;color:var(--muted);font-size:12px}.version{margin-left:auto;border:1px solid #665a36;color:var(--gold);border-radius:99px;padding:7px 11px;font-size:10px;font-weight:800;letter-spacing:.6px;background:#211e14;white-space:nowrap}
+.hero{border:1px solid #4a5035;border-radius:var(--radius);padding:clamp(18px,3vw,28px);margin-bottom:15px;background:linear-gradient(112deg,#273624 0,#18231b 70%,#121b17 100%);box-shadow:var(--shadow)}.eyebrow{font-size:10px;font-weight:900;letter-spacing:1.7px;color:var(--gold);text-transform:uppercase}.hero h2{font-size:clamp(20px,2.7vw,29px);margin:7px 0 8px;line-height:1.18;letter-spacing:-.45px}.hero p{max-width:1000px;margin:0;color:#c4d0c4;font-size:13px}
+.panel{background:linear-gradient(145deg,#17221b,#111814);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:15px}.panel-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 13px}.panel-title h3{margin:0;font-size:15px}.panel-title p{margin:3px 0 0;color:var(--muted);font-size:11px}
+.config{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.field{display:grid;gap:6px;min-width:0}.field label{color:#c0cec1;font-size:11px;font-weight:650}.field input,.field select{width:100%;min-width:0;border:1px solid #3a4b3d;background:#0b130e;border-radius:10px;color:var(--text);padding:10px 11px;font-size:12px}.field input:hover,.field select:hover{border-color:#667954}.field .hint{color:#829486;font-size:10px;line-height:1.35}.advanced{margin-top:14px;border-top:1px solid #2b392f;padding-top:12px}.advanced summary{color:var(--gold);font-size:12px;font-weight:750;cursor:pointer;list-style:none}.advanced summary::-webkit-details-marker{display:none}.advanced summary:after{content:"＋";float:right;color:var(--muted)}.advanced[open] summary:after{content:"−"}.advanced-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-top:12px}.checkrow{display:flex;align-items:center;gap:8px;min-height:38px;padding:8px 10px;border:1px solid #344437;background:#0d1510;border-radius:10px;color:#c6d1c5;font-size:11px}.checkrow input{accent-color:var(--gold);width:15px;height:15px}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-top:15px}.btn{border:1px solid #3a4b3d;background:#25342a;color:var(--text);padding:10px 14px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;transition:transform .12s,border-color .12s,filter .12s}.btn:hover:not(:disabled){filter:brightness(1.13);transform:translateY(-1px);border-color:#72815e}.btn:disabled{opacity:.42;cursor:not-allowed}.btn.primary{background:linear-gradient(135deg,#f0d487,#d4a94e);border-color:#e4c474;color:#211b0e}.btn.danger{background:#39221f;border-color:#754039;color:#ffc4bb}.pill.good{background:#173d29;color:#9be3b0;border-color:#326246}.pill.warn{background:#40351b;color:#f0d48a;border-color:#725d2a}.pill.bad{background:#402424;color:#f2a4a0;border-color:#724040}#integrityBanner{margin:0 0 16px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5}
+.status{margin-left:auto;color:var(--muted);font-size:11px}.status.ok{color:var(--green)}.status.error{color:var(--red)}.progress-wrap{height:7px;border-radius:99px;background:#28352c;overflow:hidden;margin-top:13px}.progress{height:100%;width:0;background:linear-gradient(90deg,#79c78b,#e6c36f);transition:width .18s}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:15px 0}.stat{min-width:0;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#17221b,#111814);padding:13px}.stat label{display:block;color:var(--muted);font-size:10px}.stat strong{display:block;margin-top:4px;font-size:clamp(20px,2.2vw,27px);overflow-wrap:anywhere;line-height:1.2}.stat small{display:block;margin-top:5px;color:#819284;font-size:10px}
+.result-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:20px 0 10px}.result-head h3{margin:0;font-size:18px}.result-head p{margin:4px 0 0;color:var(--muted);font-size:11px}.count{padding:6px 9px;border:1px solid #4c5036;background:#201f16;border-radius:99px;color:var(--gold);font-size:11px;white-space:nowrap}.results-panel{padding:12px}.tablewrap{overflow:auto;border:1px solid #304035;border-radius:12px;overscroll-behavior-x:contain}table{width:100%;min-width:1280px;border-collapse:separate;border-spacing:0;font-size:11px}th,td{padding:11px 10px;border-bottom:1px solid #29382e;text-align:left;white-space:nowrap;vertical-align:middle}th{position:sticky;top:0;z-index:2;background:#1d2a21;color:#aebdad;font-size:10px;letter-spacing:.25px}tbody tr:hover td{background:#1a281e}tbody tr:last-child td{border-bottom:0}.itemcell{display:flex;align-items:center;gap:9px;min-width:230px;white-space:normal}.itempic{width:46px;height:46px;flex:0 0 46px;object-fit:contain;border:1px solid #3b4a3e;background:#202c23;border-radius:10px}.itemname{font-size:12px;font-weight:800;line-height:1.25}.itemid{margin-top:3px;color:#8c9c8d;font-size:9px;overflow-wrap:anywhere}.rank{color:#b5c2b6;font-weight:800}.money{font-variant-numeric:tabular-nums}.profit{color:var(--green);font-weight:850}.loss{color:var(--red)}.roi{font-weight:800;color:#b8d7a9}.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border-radius:6px;background:#26372b;color:#bce0b9;font-size:9px;font-weight:750}.pill.warn{background:#3c321c;color:#f0d18a}.pill.bad{background:#3d2521;color:#f1a098}.pill.neutral{background:#27312d;color:#bfcbc2}.age-good{color:var(--green)}.age-warn{color:var(--amber)}.age-bad{color:var(--red)}.detail-btn{padding:6px 8px;border:1px solid #3e5142;background:#1b2b20;color:#cfe2d0;border-radius:7px;font-size:10px;font-weight:750;cursor:pointer}.detail-row[hidden]{display:none}.detail-content{white-space:normal;min-width:500px;padding:10px 8px;color:#b9c8ba}.detail-content ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 22px;margin:0;padding-left:17px}.detail-content li{padding:2px 0}.empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:12px}.empty strong{display:block;color:var(--text);font-size:14px;margin-bottom:5px}.footnote{margin-top:12px;color:#9eac9e;font-size:10px;line-height:1.5}.notice{border:1px solid #4b432c;background:#242116;color:#d8d0ad;border-radius:12px;padding:12px 14px;margin:12px 0;font-size:11px}.notice strong{color:#f0d58b}.source-note{border:1px solid #324236;background:#111b15;color:#a8b6a9;border-radius:12px;padding:12px 14px;margin:12px 0;font-size:10px;line-height:1.55}.source-note a{color:var(--gold);text-decoration:none}.source-note a:hover{text-decoration:underline}.foot{text-align:center;color:#6f8073;font-size:10px;padding:12px 0 4px}
+@media(max-width:1050px){.config,.advanced-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.app{padding:11px}.version{display:none}.panel{padding:12px}.config,.advanced-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.field label{font-size:10px}.field input,.field select{padding:9px 7px;font-size:11px}.actions{gap:7px}.actions .btn{flex:1;padding:10px 8px}.status{width:100%;margin:2px 0 0}.hero{padding:17px}.stats{gap:8px}.stat{padding:10px}.stat strong{font-size:20px}.result-head{align-items:start}.count{white-space:normal;text-align:right}.detail-content ul{grid-template-columns:1fr}}
+@media(max-width:365px){.config,.advanced-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* ========================= ALBION SCAN PRO 5.0 · VISUAL REFRESH ========================= */
+:root{--bg:#080e0d;--surface:#101a17;--surface2:#15231e;--surface3:#1c2d25;--line:#293d34;--text:#f0f7f2;--muted:#9aada2;--gold:#e8c778;--green:#8ee0a7;--red:#f08b84;--blue:#8bc8ed;--amber:#efc878;--radius:19px;--shadow:0 20px 55px #0005}
+body{background:radial-gradient(ellipse at 82% -15%,#1f4738 0,transparent 36%),radial-gradient(ellipse at -10% 45%,#172c25 0,transparent 34%),var(--bg);letter-spacing:.01em}
+.app{max-width:1600px;padding:clamp(15px,2.7vw,38px)}
+header{gap:16px;margin-bottom:22px}.logo{width:54px;height:54px;flex-basis:54px;border-radius:17px;background:linear-gradient(145deg,#e9d28c,#8cbd91 58%,#477e65);box-shadow:0 10px 30px #0007;color:#14231b;font-size:29px}.brand h1{font-size:clamp(25px,3.2vw,37px);letter-spacing:-1.2px}.brand p{font-size:12px;letter-spacing:.02em}.version{border-color:#54674a;background:#18231b;color:#ebd38e;padding:7px 12px}
+.hero{position:relative;overflow:hidden;border:1px solid #3b5947;border-radius:23px;padding:clamp(22px,3.6vw,34px);margin-bottom:18px;background:linear-gradient(112deg,#1c3a2c 0%,#14251e 53%,#101a17 100%);box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:250px;height:250px;right:-65px;top:-125px;border:1px solid #b6d29a24;border-radius:50%;box-shadow:0 0 0 28px #b6d29a0b,0 0 0 60px #b6d29a08;pointer-events:none}.eyebrow{font-size:10px;letter-spacing:2px;color:#ead28f}.hero h2{max-width:780px;font-size:clamp(22px,3vw,34px);letter-spacing:-.8px}.hero p{max-width:950px;font-size:13px;line-height:1.7;color:#c6d5cb}
+.panel{background:linear-gradient(145deg,#14221c,#0f1815);border:1px solid #2d4136;border-radius:21px;padding:clamp(14px,2vw,21px);box-shadow:0 12px 34px #0002}.panel-title{margin-bottom:17px}.panel-title h3{font-size:16px;letter-spacing:-.2px}.panel-title p{font-size:11px}.panel-kicker{flex:0 0 auto;border:1px solid #415440;background:#1a2a20;color:#c6d69b;padding:6px 9px;border-radius:99px;font-size:9px;font-weight:850;letter-spacing:1px}
+.scope-box{border:1px solid #3a5545;border-radius:16px;padding:14px;margin:0 0 17px;background:linear-gradient(120deg,#172b21,#111d18)}.scope-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.scope-heading strong{display:block;font-size:13px;color:#edf6ef}.scope-heading span:not(.scope-count){display:block;margin-top:3px;font-size:10px;color:var(--muted)}.scope-count{border:1px solid #526344;background:#202a1c;color:#e5d18e;padding:6px 9px;border-radius:99px;font-size:10px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}.scope-controls{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(180px,.8fr) minmax(240px,1.4fr);gap:10px;align-items:end}.scope-help{display:flex;align-items:center;gap:9px;min-height:39px;padding:9px 11px;border:1px solid #304639;background:#0e1913;border-radius:11px;color:#a9b9ad;font-size:10px;line-height:1.45}.scope-help-icon{display:grid;place-items:center;width:22px;height:22px;flex:0 0 22px;border-radius:7px;background:#263b2d;color:#d8c37f;font-size:15px}
+.config{gap:12px}.field{gap:6px}.field label{font-size:11px;font-weight:750;color:#c4d2c8}.field input,.field select{min-height:42px;border:1px solid #344b3e;background:#0b1410;border-radius:11px;color:#eff7f1;padding:10px 12px;font-size:12px;transition:border-color .15s,box-shadow .15s,background .15s}.field input:hover,.field select:hover{border-color:#63816a;background:#0e1913}.field input:focus,.field select:focus{border-color:#d6bd75;box-shadow:0 0 0 3px #d6bd751b;outline:0}.field .hint{font-size:10px;color:#8fa397}.advanced{margin-top:17px;padding-top:14px;border-color:#293d32}.advanced summary{font-size:12px;color:#e7ce88}.advanced-grid{gap:12px}.checkrow{border-color:#30463a;background:#0e1914;border-radius:11px;font-size:11px;line-height:1.4}.checkrow input{accent-color:#d9bf75}
+.actions{gap:9px;margin-top:17px}.btn{border:1px solid #3a5344;background:#1b3025;border-radius:11px;padding:11px 15px;font-size:11px;letter-spacing:.01em;box-shadow:0 3px 10px #0002}.btn:hover:not(:disabled){border-color:#8aa77e;filter:brightness(1.12);transform:translateY(-1px)}.btn.primary{background:linear-gradient(135deg,#f0d995,#d3b05e);border-color:#e4cb83;color:#1d2419;box-shadow:0 6px 18px #b7923728}.btn.danger{background:#382321;border-color:#754039}.status{font-size:11px;line-height:1.4}.progress-wrap{height:8px;margin-top:15px;background:#24372c}.progress{background:linear-gradient(90deg,#77d59a,#e8c778)}
+.stats{gap:12px;margin:17px 0 21px}.stat{position:relative;overflow:hidden;border:1px solid #2c4035;border-radius:17px;background:linear-gradient(145deg,#16261e,#101915);padding:15px;box-shadow:0 8px 24px #0002}.stat:after{content:"";position:absolute;width:78px;height:78px;right:-28px;bottom:-38px;border-radius:50%;background:#a9d5a112}.stat label{font-size:10px;letter-spacing:.02em}.stat strong{font-size:clamp(21px,2.4vw,29px);letter-spacing:-.7px}.stat small{font-size:10px;color:#8ea296}.result-head{margin:22px 0 11px}.result-head h3{font-size:19px;letter-spacing:-.35px}.result-head p{font-size:11px;line-height:1.5}.count{background:#20271b;border-color:#52603d;color:#e5cf87;font-weight:800}.results-panel{padding:13px;border-radius:18px}.tablewrap{border-color:#31463a;border-radius:13px}table{min-width:1280px;font-size:11px}th{background:#1a2b21;color:#c0d0c3;font-size:10px;text-transform:uppercase;letter-spacing:.45px}th,td{padding:12px 11px}tbody tr:hover td{background:#1b2c22}.itempic{border-color:#3d5545;background:#1c2c23;border-radius:11px}.itemname{font-size:12px}.itemid{font-size:9px;color:#93a598}.pill{background:#203b2b;color:#b8ecc2;border-radius:99px;padding:5px 8px;font-size:9px}.pill.warn{background:#3b321e;color:#f2d48e}.pill.bad{background:#3c2522;color:#f2aaa1}.detail-btn{border:1px solid #45604e;background:#203629;color:#d5e7d9;border-radius:8px;padding:7px 10px;font-size:10px}.detail-btn:hover{border-color:#92b58f;background:#294431}.detail-content{color:#c2d1c5;line-height:1.6}.detail-content li{font-size:10px}.empty{padding:44px 18px;font-size:12px;line-height:1.65}.empty strong{font-size:15px}.notice{border-color:#5b4b2d;background:#211f16;border-radius:14px;padding:14px 16px;font-size:11px;line-height:1.6}.source-note{border-color:#2e4538;background:#0f1914;border-radius:14px;padding:14px 16px;font-size:10px;line-height:1.7}.foot{font-size:10px;padding:16px 0 5px}
+.desktop-results{display:block}.mobile-results{display:none}
+.result-card{border:1px solid #30473a;border-radius:15px;padding:13px;background:linear-gradient(145deg,#17271f,#101a15);box-shadow:0 8px 22px #0002}.result-card-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.result-card-item{display:flex;align-items:center;gap:10px;min-width:0}.result-card-image{width:54px;height:54px;flex:0 0 54px;object-fit:contain;border:1px solid #3b5344;background:#203126;border-radius:12px;padding:3px}.result-card-copy{display:grid;gap:4px;min-width:0}.result-card-copy strong{font-size:12px;line-height:1.3}.result-card-copy small{font-size:9px;color:#91a498;overflow-wrap:anywhere}.result-card-profit{text-align:right;flex:0 0 auto}.result-card-profit small{display:block;color:#9aafa0;font-size:9px}.result-card-profit strong{display:block;color:var(--green);font-size:15px;font-variant-numeric:tabular-nums}.card-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.card-metric{border:1px solid #2a4034;background:#101a15;border-radius:10px;padding:8px 9px;min-width:0}.card-metric span{display:block;color:#91a497;font-size:9px}.card-metric strong{display:block;margin-top:3px;font-size:11px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.result-card-footer{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:11px}.result-card-footer .detail-btn{margin-left:auto}.item-fallback{display:grid;place-items:center;color:#d5bb77}.item-fallback[hidden]{display:none}.mobile-detail{min-width:0;margin-top:12px;padding:12px 2px 2px;border-top:1px solid #2a4034}.mobile-detail ul{grid-template-columns:1fr;padding-left:18px}
+@media(max-width:1050px){.scope-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.scope-help{grid-column:1/-1}.config,.advanced-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:860px){.desktop-results{display:none}.mobile-results{display:grid;gap:10px}.results-panel{padding:10px}.result-head{margin-top:18px}}
+@media(max-width:620px){.app{padding:12px}.panel{padding:13px}.panel-kicker{display:none}.hero{border-radius:19px;padding:18px}.hero h2{font-size:23px}.hero p{font-size:12px;line-height:1.6}.scope-box{padding:12px}.scope-heading{align-items:flex-start}.scope-count{font-size:9px;padding:6px 7px}.scope-controls{grid-template-columns:1fr 1fr;gap:8px}.scope-help{grid-column:1/-1}.config,.advanced-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.field label{font-size:10px}.field input,.field select{min-height:40px;padding:9px 8px;font-size:11px}.actions .btn{flex:1 1 calc(50% - 7px);min-width:0}.status{width:100%;margin:3px 0 0}.stats{gap:8px;margin:12px 0 17px}.stat{padding:11px}.stat strong{font-size:21px}.stat small{font-size:9px}.result-head{align-items:flex-start}.result-head h3{font-size:17px}.count{font-size:10px}.result-card{padding:11px}.result-card-image{width:48px;height:48px;flex-basis:48px}.result-card-profit strong{font-size:13px}.notice,.source-note{font-size:10px;padding:12px}}
+@media(max-width:390px){.scope-controls{grid-template-columns:1fr}.scope-help{grid-column:auto}.scope-heading{display:grid}.config,.advanced-grid{grid-template-columns:1fr}.result-card-top{align-items:flex-start}.result-card-profit{max-width:110px}.result-card-copy small{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.stat,.result-card,.btn{transition:none!important}}
+
+
+/* ========================= ALBION SCAN PRO 9.0 ========================= */
+.stats{grid-template-columns:repeat(5,minmax(0,1fr))}
+.depth-good{color:var(--green);font-weight:800}.depth-mid{color:var(--amber);font-weight:800}.depth-none{color:#a4b2a8;font-weight:750}
+.depth-levels{display:grid;gap:5px;margin:10px 0 0;padding:0;list-style:none}
+.depth-levels li{display:flex;justify-content:space-between;gap:12px;padding:6px 8px;border:1px solid #2c4236;background:#101b15;border-radius:8px;font-size:10px}
+.cost-breakdown{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;margin:10px 0}
+.cost-breakdown span{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #26392e;padding:5px 0;font-size:10px}
+.result-card .depth-line{margin-top:9px;padding:8px 9px;border:1px solid #2c4236;border-radius:9px;background:#101a15;font-size:10px;color:#b4c5b8;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.result-card .depth-line strong{color:var(--text)}
+.status.warn{color:var(--amber)}
+@media(max-width:1150px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:620px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cost-breakdown{grid-template-columns:1fr}.depth-levels li{font-size:9px}}
+
+
+/* ========================= ALBION SCAN PRO 9.0 ========================= */
+.tool-nav{display:flex;gap:8px;flex-wrap:wrap;margin:3px 0 18px;padding:8px;border:1px solid #2b4235;border-radius:14px;background:#0e1914;position:sticky;top:8px;z-index:10;backdrop-filter:blur(12px)}
+.tool-nav a{color:#c2d4c7;text-decoration:none;font-size:11px;font-weight:800;padding:8px 12px;border:1px solid transparent;border-radius:9px}.tool-nav a:hover{border-color:#45634e;background:#1a2c21;color:#f0d995}
+.v7-tool{scroll-margin-top:80px}.tool-controls{display:grid;grid-template-columns:minmax(230px,1fr) auto;gap:11px;align-items:end}.history-controls{grid-template-columns:minmax(200px,1.4fr) minmax(160px,1fr) 130px auto}.watch-controls{grid-template-columns:minmax(220px,1fr) auto auto}.tool-output{margin-top:14px}.tool-status{margin:10px 0;padding:9px 11px;border:1px solid #2e4638;background:#0e1914;border-radius:10px;color:#adbfaf;font-size:11px;line-height:1.5}.tool-status.ok{color:var(--green);border-color:#3b6848}.tool-status.warn{color:var(--amber);border-color:#64512c}.tool-status.error{color:var(--red);border-color:#68403c}
+.compare-table-wrap{overflow:auto;border:1px solid #304638;border-radius:12px}.compare-table{width:100%;min-width:800px;border-collapse:collapse;font-size:11px}.compare-table th,.compare-table td{padding:10px 11px;border-bottom:1px solid #293e32;text-align:left;white-space:nowrap}.compare-table th{background:#1a2b21;color:#c2d2c4;font-size:10px;text-transform:uppercase}.compare-table tr.best-city td{background:#1d3525}.compare-table tr:last-child td{border-bottom:0}.compare-table .best-mark{color:var(--green);font-weight:900}
+.history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.chart-panel{min-width:0;padding:13px;border:1px solid #304638;border-radius:14px;background:#0f1914}.chart-panel h4{margin:0 0 10px;font-size:12px}.chart-area{min-height:230px;display:grid;align-items:center}.chart-area svg{width:100%;height:auto;display:block;overflow:visible}.chart-note{margin:9px 0 0;color:#85998c;font-size:9px;line-height:1.5}.chart-empty{padding:28px 12px;text-align:center;color:#93a598;font-size:11px}.watchlist-results{display:grid;gap:9px;margin-top:12px}.watch-item{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(100px,.7fr)) auto;gap:10px;align-items:center;padding:11px;border:1px solid #304638;border-radius:12px;background:#101b15}.watch-item-main{display:flex;align-items:center;gap:9px;min-width:0}.watch-item-main img{width:42px;height:42px;object-fit:contain;border:1px solid #3b5344;border-radius:9px;background:#1b2b21}.watch-item-main strong{display:block;font-size:11px;overflow-wrap:anywhere}.watch-item-main small{display:block;color:#8fa195;font-size:9px}.watch-metric span{display:block;color:#91a497;font-size:9px}.watch-metric strong{display:block;font-size:11px;font-variant-numeric:tabular-nums}.watch-item.is-alert{border-color:#527947;background:#16281c}.watch-actions{display:flex;gap:6px}.watch-actions button{padding:7px 9px}.watch-alert{display:inline-flex;align-items:center;gap:5px;color:#b8edb4;font-size:9px;font-weight:850}.small-btn{border:1px solid #405a49;background:#1b3025;color:#d8e7dc;border-radius:8px;font-size:10px;font-weight:800;cursor:pointer}.small-btn:hover{border-color:#8aa77e}.small-btn.remove{background:#352321;border-color:#69403b;color:#f4b4aa}.source-chips{display:flex;gap:5px;flex-wrap:wrap}.source-chip{border:1px solid #3c5947;background:#17281e;border-radius:99px;padding:4px 7px;color:#c3d9c7;font-size:9px}.city-missing td{color:#9baca0;background:#111a15}.compare-summary{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.city-compare-cards{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}.city-compare-card{min-width:0;border:1px solid #304638;border-radius:13px;padding:11px;background:linear-gradient(145deg,#17271f,#101a15)}.city-compare-card.best{border-color:#64835b;background:#1a3022}.city-compare-card.missing{opacity:.78}.city-card-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}.city-card-head strong{font-size:12px}.city-card-rank{font-size:10px;color:var(--green);font-weight:850}.city-card-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.city-card-metrics>div{min-width:0;border:1px solid #2b4034;background:#0f1914;border-radius:9px;padding:7px}.city-card-metrics span{display:block;color:#8fa397;font-size:9px}.city-card-metrics strong{display:block;margin-top:3px;font-size:10px;overflow-wrap:anywhere}.city-card-sources{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.city-card-reason{margin-top:8px;color:#efcf8a;font-size:10px}.city-availability{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:10px 0}.city-availability>div{border:1px solid #3a4b3d;border-radius:9px;padding:8px;color:#b9c8ba;font-size:10px}.compare-summary span{padding:7px 9px;border:1px solid #314b3a;border-radius:9px;background:#111d16;color:#b6c9ba;font-size:10px}
+@media(max-width:1000px){.history-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.watch-item{grid-template-columns:minmax(0,1fr) repeat(2,minmax(100px,.7fr)) auto}.watch-item .watch-metric:nth-of-type(4){display:none}}
+@media(max-width:650px){.tool-nav{position:static;overflow-x:auto;flex-wrap:nowrap}.tool-nav a{white-space:nowrap}.tool-controls,.history-controls,.watch-controls{grid-template-columns:1fr 1fr}.tool-controls .field:first-child{grid-column:1/-1}.tool-controls .btn{width:100%}.history-grid{grid-template-columns:1fr}.chart-area{min-height:190px}.watch-item{grid-template-columns:minmax(0,1fr) minmax(105px,.6fr);gap:8px}.watch-item-main{grid-column:1/-1}.watch-item .watch-metric:nth-of-type(4){display:block}.watch-actions{justify-content:flex-end}.watch-item .watch-metric{border-top:1px solid #263b2e;padding-top:6px}}
+@media(max-width:390px){.tool-controls,.history-controls,.watch-controls{grid-template-columns:1fr}.tool-controls .field:first-child{grid-column:auto}.watch-item{grid-template-columns:1fr 1fr}.watch-item-main{grid-column:1/-1}.watch-actions{grid-column:1/-1}}
+
+
+/* PRO 9.0: data control and reliability */
+.data-health-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:13px}.data-health{padding:12px;border:1px solid #34483a;border-radius:12px;background:#0d1711;min-width:0}.data-health span{display:block;color:var(--muted);font-size:10px}.data-health strong{display:block;margin-top:5px;color:var(--gold);font-size:14px;overflow-wrap:anywhere}.risk-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.risk-box{border:1px solid #34483a;background:#0e1812;border-radius:10px;padding:10px}.risk-box span{display:block;color:var(--muted);font-size:10px}.risk-box strong{display:block;margin-top:4px;font-size:13px}.risk-good{color:var(--green)}.risk-bad{color:var(--red)}
+@media(max-width:700px){.data-health-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.risk-grid{grid-template-columns:1fr}}
+
+/* City comparison mobile overrides must follow the base card rule. */
+@media(max-width:860px){.compare-table-wrap{display:none}.city-compare-cards{display:grid}}
+@media(max-width:520px){.city-compare-cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="app">
+<header><div class="logo" aria-hidden="true">A</div><div class="brand"><h1>Albion Scan Market</h1><p>Scanner global de crafting · Mercado Negro de Caerleon · Motor de datos PRO 10.3.1</p></div><div class="version">PRO · 10.3.1</div></header>
+<section class="hero"><div class="eyebrow">CRAFTING → BLACK MARKET</div><h2>Detecta oportunidades reales antes de gastar tu silver</h2><p>Analiza recetas, compara ciudades de fabricación y compra de materiales, simula ventas al Mercado Negro y vigila oportunidades. Incluye historial de órdenes de venta y capturas BM locales, retorno de recursos, tarifa de estación, impuestos, inversión por lote y cobertura.</p></section>
+<section class="panel" aria-label="Configuración del scanner">
+ <div class="status" id="integrityBanner" role="status">Motor PRO 10.3.1 · verificando integridad de datos…</div>
+ <div class="panel-title"><div><h3>Configuración del análisis</h3><p>Ajusta el servidor y las condiciones con las que realmente fabricarías.</p></div><span class="panel-kicker">SCAN INTELIGENTE</span></div>
+ <section class="scope-box" aria-label="Filtros de objetos">
+  <div class="scope-heading"><div><strong>¿Qué quieres escanear?</strong><span>Solo incluye artículos que el Mercado Negro acepta.</span></div><span class="scope-count" id="scopeCount">Preparando catálogo…</span></div>
+  <div class="scope-controls">
+   <div class="field"><label for="familyFilter">Familia de objetos</label><select id="familyFilter"><option value="all">Todo lo elegible para el BM</option><option value="weapons">Armas</option><option value="armor">Armaduras</option><option value="bags">Bolsas y satchels</option><option value="capes">Capas</option><option value="offhands">Manos secundarias</option><option value="tools">Herramientas BM (.0)</option></select></div>
+   <div class="field"><label for="branchFilter">Rama / especialidad</label><select id="branchFilter" disabled><option value="all">Todas las ramas</option></select></div>
+   <div class="scope-help" id="scopeHint"><span class="scope-help-icon">⌕</span><span>El filtro se aplica antes de consultar precios. Se excluyen comida, pociones, monturas, equipo de recolector y objetos no aceptados por el BM.</span></div>
+  </div>
+ </section>
+ <div class="config">
+  <div class="field"><label for="server">Servidor</label><select id="server"><option value="west">Américas · West</option><option value="europe">Europa · Europe</option><option value="east">Asia · East</option></select><span class="hint">Precios independientes por región.</span></div>
+  <div class="field"><label for="city">Ciudad de fabricación / materiales</label><select id="city"><option value="auto">Auto · compara 7 ciudades</option><option value="Bridgewatch">Bridgewatch</option><option value="Fort Sterling">Fort Sterling</option><option value="Lymhurst">Lymhurst</option><option value="Martlock">Martlock</option><option value="Thetford">Thetford</option><option value="Caerleon">Caerleon</option><option value="Brecilien">Brecilien</option></select><span class="hint" id="cityHint">Auto compara las 7 ciudades, aplica +15% solo donde corresponde y elige el menor coste neto.</span></div>
+  <div class="field"><label for="quality">Calidad asumida del artículo fabricado</label><select id="quality"><option value="1">Normal</option><option value="2">Bueno</option><option value="3">Excepcional</option><option value="4">Excelente</option><option value="5">Obra maestra</option></select><span class="hint">Escenario determinista: supone que el 100% del lote sale con esta calidad. La calidad real del crafting es aleatoria; introduce una mezcla de calidades manualmente o analiza este resultado como escenario, nunca como garantía. Los materiales se cotizan en calidad normal.</span></div>
+  <div class="field"><label for="tax">Impuesto de venta BM (%)</label><input id="tax" type="number" min="0" max="100" step="0.1" value="4"><span class="hint">Ajusta según Premium e impuesto aplicable.</span></div>
+  <div class="field"><label for="minProfit">Beneficio neto mínimo por unidad</label><input id="minProfit" type="number" min="0" step="100" value="1000"></div>
+  <div class="field"><label for="minROI">ROI mínimo (%)</label><input id="minROI" type="number" min="0" step="1" value="0"><span class="hint">Filtra márgenes demasiado pequeños.</span></div>
+  <div class="field"><label for="batchQty">Unidades a fabricar (simulación)</label><input id="batchQty" type="number" min="1" max="5000" step="1" value="10"><span class="hint">La app redondea al lote de receta completo y simula su venta en el BM.</span></div>
+  <div class="field"><label for="maxAge">Antigüedad máxima de precios</label><select id="maxAge"><option value="2">2 horas</option><option value="6" selected>6 horas</option><option value="12">12 horas</option><option value="24">24 horas</option><option value="48">48 horas</option><option value="72">72 horas</option></select><span class="hint">Se descartan oportunidades con cotizaciones más antiguas.</span></div>
+  <div class="field"><label for="limit">Máximo de resultados</label><select id="limit"><option value="50">50 mejores</option><option value="100" selected>100 mejores</option><option value="250">250 mejores</option><option value="500">500 mejores</option><option value="1000">Todos los rentables</option></select></div>
+ </div>
+ <details class="advanced"><summary>Ajustes avanzados · retorno, foco y costes</summary>
+  <div class="advanced-grid">
+   <div class="field"><label for="rrrMode">Cálculo del retorno de materiales</label><select id="rrrMode"><option value="auto" selected>Automático por ciudad</option><option value="manual">Manual</option></select><span class="hint">Automático usa +18% base y +15% solo en la ciudad con especialidad del objeto.</span></div>
+   <div class="field"><label for="returnRate">Retorno manual (%)</label><input id="returnRate" type="number" min="0" max="100" step="0.1" value="15.25" disabled><span class="hint">Solo se aplica al elegir el modo manual.</span></div>
+   <div class="field"><label for="dailyBonus">Bonus diario de producción</label><select id="dailyBonus"><option value="0">Ninguno</option><option value="0.10">+10%</option><option value="0.20">+20%</option></select><span class="hint">Actívalo solo si el bonus coincide con el objeto.</span></div>
+   <div class="field"><label for="stationFee">Tarifa de estación (S / 100 nutrición)</label><input id="stationFee" type="number" min="0" max="1000" step="1" value="0"><span class="hint">Tarifa en silver por 100 nutrición. Se aplica a todas las ciudades; 0 desactiva este coste. Introduce la tarifa real antes de confiar en el margen.</span></div>
+   <div class="field"><label for="materialSourceMode">Dónde comprar los materiales</label><select id="materialSourceMode"><option value="craft" selected>En la ciudad donde fabrico</option><option value="cheapest">Más barato por coste puesto en fábrica (incluye transporte configurado)</option></select><span class="hint">El motor minimiza coste de materiales + viajes fijos por ciudad externa. Si el transporte está en 0, compara solo precios.</span></div>
+   <div class="field"><label for="sourceTransportPerCity">Transporte total de materiales por ciudad externa (S)</label><input id="sourceTransportPerCity" type="number" min="0" step="100" value="0"><span class="hint">Introduce el coste total de todos los viajes previstos para traer los materiales desde cada ciudad externa; la app lo multiplica por el número de ciudades de origen.</span></div>
+  <div class="field"><label for="finishedTransportPerBatch">Transporte del lote terminado hasta Caerleon (S)</label><input id="finishedTransportPerBatch" type="number" min="0" step="100" value="0"><span class="hint">Coste total estimado del viaje del lote fabricado a Caerleon. Se aplica si fabricas fuera de Caerleon.</span></div>
+  <div class="field"><label for="transportRiskPct">Reserva por riesgo de transporte (%)</label><input id="transportRiskPct" type="number" min="0" max="100" step="0.5" value="0"><span class="hint">Reserva manual estimada sobre el valor expuesto al transporte; no es una probabilidad calculada por la app.</span></div>
+   <div class="field"><label for="otherCost">Otros costes por unidad (S)</label><input id="otherCost" type="number" min="0" step="1" value="0"><span class="hint">Otros gastos adicionales por cada objeto producido.</span></div>
+   <div class="field"><label for="silverPerFocus">Valor de cada punto de foco (S)</label><input id="silverPerFocus" type="number" min="0" step="0.1" value="0"><span class="hint">El coste de foco se estima con el valor que introduzcas; la especialización puede reducir el foco real.</span></div>
+   <label class="checkrow"><input id="useFocus" type="checkbox"> Incluir bonus de fabricación con foco (+59% bonus)</label>
+   <label class="checkrow"><input id="strictDates" type="checkbox" checked> Exigir fecha válida para precios de materiales</label>
+   <label class="checkrow"><input id="requireFullDepth" type="checkbox" checked> Exigir cobertura completa del lote en el BM</label>
+   <div class="field"><label for="sortBy">Ordenar resultados por</label><select id="sortBy"><option value="profit">Beneficio estimado / unidad</option><option value="batch">Beneficio inmediato del lote</option><option value="roi">ROI del lote (%)</option><option value="liquidity">Cobertura del libro (%)</option></select></div>
+  </div>
+ </details>
+ <section class="panel" id="transportSimulator" style="margin-top:16px">
+  <div class="panel-title"><h3>Simulador de transporte · Buey T7</h3><p>Estimación configurable para rutas mixtas. No calcula rutas ni predice muertes: utiliza tus propios supuestos.</p></div>
+  <div class="config">
+   <div class="field"><label for="cargoWeightKg">Peso total del lote (kg)</label><input id="cargoWeightKg" type="number" min="0" step="1" value="0"></div>
+   <div class="field"><label for="cargoValueSilver">Valor expuesto del lote (S)</label><input id="cargoValueSilver" type="number" min="0" step="1000" value="0"></div>
+   <div class="field"><label for="oxCapacityKg">Capacidad base buey T7 (kg)</label><input id="oxCapacityKg" type="number" min="1" step="1" value="2667"><span class="hint">Buey T7 normal: aprox. 2.667 kg de carga adicional.</span></div>
+   <div class="field"><label for="loadSafetyPct">Uso máximo de capacidad (%)</label><input id="loadSafetyPct" type="number" min="10" max="100" step="1" value="85"><span class="hint">Margen para evitar viajar al límite.</span></div>
+   <div class="field"><label for="tripMinutes">Duración por viaje completo (min)</label><input id="tripMinutes" type="number" min="1" step="5" value="60"></div>
+   <div class="field"><label for="tripCostSilver">Coste por viaje (S)</label><input id="tripCostSilver" type="number" min="0" step="100" value="0"></div>
+   <div class="field"><label for="lethalSharePct">Parte de ruta en zona letal (%)</label><input id="lethalSharePct" type="number" min="0" max="100" step="5" value="50"><span class="hint">“Mixta” no define el porcentaje: ajústalo según tu ruta.</span></div>
+   <div class="field"><label for="deathChancePct">Probabilidad estimada de muerte por viaje letal (%)</label><input id="deathChancePct" type="number" min="0" max="100" step="0.5" value="5"><span class="hint">Supuesto manual, no estadística del juego.</span></div>
+   <div class="field"><label for="oxGearValue">Valor de buey + equipo (S)</label><input id="oxGearValue" type="number" min="0" step="1000" value="0"></div>
+  </div>
+  <div class="risk-grid" id="transportOutputs">
+   <div class="risk-box"><span>Viajes necesarios</span><strong id="transportTrips">—</strong></div>
+   <div class="risk-box"><span>Tiempo total estimado</span><strong id="transportTime">—</strong></div>
+   <div class="risk-box"><span>Coste directo de transporte</span><strong id="transportDirectCost">—</strong></div>
+   <div class="risk-box"><span>Riesgo acumulado estimado</span><strong id="transportDeathRisk">—</strong></div>
+   <div class="risk-box"><span>Reserva esperada por pérdidas</span><strong id="transportExpectedLoss">—</strong></div>
+   <div class="risk-box"><span>Coste económico total estimado</span><strong id="transportTotalCost">—</strong></div>
+  </div>
+  <p class="footnote" id="transportCaveat">Introduce el peso y valor real del lote. La capacidad del buey no sustituye la capacidad adicional de personaje, bolsa y otros modificadores.</p>
+  <div class="actions"><button class="btn" type="button" id="applyTransportEstimate">Aplicar costes al escáner</button></div>
+ </section>
+ <div class="actions"><button class="btn" id="loadRecipes">↻ Actualizar base de recetas</button><button class="btn primary" id="runScan" disabled>⌕ Escanear catálogo</button><button class="btn danger" id="cancelScan" disabled>Cancelar</button><button class="btn" id="exportCsv" disabled>Exportar CSV</button><span class="status" id="status" role="status" aria-live="polite">Preparando base de recetas…</span></div>
+ <div class="progress-wrap" aria-label="Progreso del escaneo"><div class="progress" id="progress"></div></div>
+</section>
+<nav class="tool-nav" aria-label="Herramientas de Albion Scan">
+ <a href="#scanner">Scanner</a><a href="#cityLab">Comparador de ciudades</a><a href="#historyLab">Historial</a><a href="#watchLab">Seguimiento</a><a href="#dataLab">Datos y copias</a>
+</nav>
+<section class="stats" aria-label="Resumen del escaneo" id="scanner">
+ <div class="stat"><label>Recetas BM elegibles</label><strong id="statRecipes">—</strong><small>Equipo y herramientas aceptados por el Mercado Negro, incluidas variantes encantadas.</small></div>
+ <div class="stat"><label>Precios BM + materiales válidos</label><strong id="statBm">—</strong><small>Recetas con todas las cotizaciones completas y recientes.</small></div>
+ <div class="stat"><label>Oportunidades rentables</label><strong id="statDeals">—</strong><small>Después de los costes configurados.</small></div>
+ <div class="stat"><label>Lotes con cobertura completa</label><strong id="statCovered">—</strong><small>La profundidad BM alcanza toda la producción simulada.</small></div>
+ <div class="stat"><label>Descartadas / incompletas</label><strong id="statMissing">—</strong><small>Sin precio, datos antiguos, receta o profundidad exigida.</small></div>
+</section>
+<section>
+ <div class="result-head"><div><h3>Mejores objetos para fabricar</h3><p id="resultSub">Carga la base y ejecuta el scanner para consultar el mercado seleccionado.</p></div><span class="count" id="resultCount">Sin escaneo</span></div>
+ <div id="results" class="panel results-panel"><div class="empty"><strong>Tu ranking aparecerá aquí</strong>Verás iconos, materiales, coste por unidad, orden de compra del BM, beneficio, ROI y antigüedad de los precios.</div></div>
+</section>
+<section class="panel v7-tool" id="cityLab" aria-label="Comparador de ciudades">
+ <div class="panel-title"><div><h3>Comparador de ciudades</h3><p>Compara la fabricación en cada ciudad, el RRR aplicado y de dónde conviene comprar cada material.</p></div><span class="panel-kicker">CITY LAB</span></div>
+ <div class="tool-controls">
+  <div class="field"><label for="cityCompareItem">Objeto del último escaneo</label><select id="cityCompareItem"><option value="">Ejecuta un escaneo para cargar objetos</option></select></div>
+  <button class="btn primary" id="runCityCompare" disabled>Comparar las 7 ciudades</button>
+ </div>
+ <div id="cityCompareResults" class="tool-output"><div class="empty"><strong>Comparación pendiente</strong>Después de escanear, selecciona un objeto para comparar el coste de fabricación y la compra de materiales.</div></div>
+ <p class="footnote">La comparación usa cotizaciones ya descargadas. El transporte de materiales, el envío del producto terminado a Caerleon y la reserva de riesgo son valores manuales; no calcula rutas, tiempo ni probabilidad de muerte automáticamente.</p>
+</section>
+<section class="panel v7-tool" id="historyLab" aria-label="Historial de precios">
+ <div class="panel-title"><div><h3>Historial de precios</h3><p>Consulta el historial comunitario de órdenes de venta y las capturas BM que esta aplicación vaya guardando.</p></div><span class="panel-kicker">PRICE HISTORY</span></div>
+ <div class="tool-controls history-controls">
+  <div class="field"><label for="historyItem">Objeto</label><select id="historyItem"><option value="">Ejecuta un escaneo para cargar objetos</option></select></div>
+  <div class="field"><label for="historyCity">Ciudad del historial</label><select id="historyCity"><option>Caerleon</option><option>Bridgewatch</option><option>Fort Sterling</option><option>Lymhurst</option><option>Martlock</option><option>Thetford</option><option>Brecilien</option></select></div>
+  <div class="field"><label for="historyWindow">Periodo</label><select id="historyWindow"><option value="7">7 días</option><option value="30" selected>30 días</option></select></div>
+  <button class="btn primary" id="loadHistory" disabled>Consultar historial</button>
+ </div>
+ <div id="historyStatus" class="tool-status" role="status" aria-live="polite">El historial se consulta cuando seleccionas un objeto.</div>
+ <div class="history-grid">
+  <div class="chart-panel"><h4>Precio medio de órdenes de venta</h4><div id="historySellChart" class="chart-area"><div class="empty">Sin datos cargados.</div></div><p class="chart-note">Fuente AODP: historial de órdenes de venta; no representa compras del NPC del Mercado Negro ni volumen de ventas ejecutadas.</p></div>
+  <div class="chart-panel"><h4>Mejor precio compatible BM observado por Albion Scan</h4><div id="historyBmChart" class="chart-area"><div class="empty">Las capturas empiezan a acumularse a partir de tus escaneos de esta versión.</div></div><p class="chart-note">Registro local del mejor nivel comprador visible durante cada escaneo, entre las calidades de orden que aceptaban la calidad seleccionada. Se guarda en este dispositivo.</p></div>
+ </div>
+</section>
+<section class="panel v7-tool" id="watchLab" aria-label="Lista de seguimiento">
+ <div class="panel-title"><div><h3>Lista de seguimiento y alertas</h3><p>Vigila los objetos que te interesan y detecta cuándo alcanzan el beneficio mínimo definido.</p></div><span class="panel-kicker">WATCHLIST</span></div>
+ <div class="tool-controls watch-controls">
+  <div class="field"><label for="watchThreshold">Beneficio neto mínimo por unidad (S)</label><input id="watchThreshold" type="number" min="0" step="100" value="3000"><span class="hint">Umbral aplicado al añadir objetos desde el ranking.</span></div>
+  <button class="btn" id="enableNotifications">Activar notificaciones</button>
+  <button class="btn primary" id="refreshWatchlist">Comprobar seguimiento</button>
+ </div>
+ <div id="watchStatus" class="tool-status" role="status" aria-live="polite">Añade objetos desde el desglose de los resultados del scanner.</div>
+ <div id="watchlistResults" class="watchlist-results"><div class="empty"><strong>Aún no sigues ningún objeto</strong>En el ranking, abre «Desglose» y pulsa «＋ Seguir» en los objetos que quieras vigilar.</div></div>
+</section>
+<section class="panel v7-tool" id="dataLab" aria-label="Datos, fiabilidad y copias de seguridad">
+ <div class="panel-title"><div><h3>Centro de datos y copias de seguridad</h3><p>Protege tu configuración, lista de seguimiento e historial local BM; revisa el estado de los datos antes de invertir.</p></div><span class="panel-kicker">DATA CONTROL</span></div>
+ <div class="tool-controls">
+  <button class="btn primary" id="exportBackup">Exportar copia de seguridad</button>
+  <label class="btn" for="importBackup" style="display:inline-flex;align-items:center;cursor:pointer">Importar copia JSON</label><input id="importBackup" type="file" accept="application/json,.json" hidden>
+  <button class="btn" id="clearLocalHistory">Borrar solo historial BM local</button>
+ </div>
+ <div id="dataStatus" class="tool-status" role="status" aria-live="polite">La copia incluye ajustes, lista de seguimiento e historial BM local. No incluye contraseñas ni datos de cuenta. El seguimiento solo consulta al pulsar «Comprobar seguimiento».</div>
+ <div class="data-health-grid">
+  <div class="data-health"><span>Servidor seleccionado</span><strong id="healthServer">—</strong></div>
+  <div class="data-health"><span>Último escaneo</span><strong id="healthScan">Todavía no</strong></div>
+  <div class="data-health"><span>Objetos seguidos</span><strong id="healthWatch">0</strong></div>
+  <div class="data-health"><span>Capturas BM locales</span><strong id="healthSnapshots">0</strong></div>
+ </div>
+ <p class="footnote">La copia es local y manual. Para sincronizar entre dispositivos, ejecutar escaneos en segundo plano o conservar datos en la nube se necesita un backend y alojamiento propios; este HTML no finge ofrecer esas funciones.</p>
+</section>
+<div class="notice"><strong>Cómo leer la profundidad:</strong> la simulación combina las órdenes BM de calidad mínima igual o inferior a la calidad de tu objeto (por ejemplo, un Q2 también puede cubrir órdenes Q1), de mayor a menor precio. Se supone que todas las unidades fabricadas tienen la calidad elegida en los ajustes. La profundidad BM mostrada es la suma de unidades en órdenes abiertas observadas. La captura del libro es el momento en que esta app descargó la respuesta; AODP no publica una marca de tiempo fiable del origen de cada orden. No equivale a compras diarias del NPC ni garantiza que las órdenes sigan intactas al llegar a Caerleon. Si no hay profundidad, el ranking marca la estimación agregada por separado.</div>
+<div class="source-note">Modelo PRO 10.3.1: compra de materiales al <code>sell_price_min</code> (instantánea de precio agregado) y venta al libro de órdenes de compra del Mercado Negro cuando el endpoint <code>/stats/orderbook/{id}</code> devuelve niveles y cantidades. La simulación consume primero el nivel de mayor precio y avanza hacia niveles inferiores. Si el libro no devuelve datos, se muestra una estimación separada basada en <code>buy_price_max</code>; no se presenta como profundidad confirmada. RRR: los porcentajes son promedios esperados; el retorno real por lote puede variar por redondeos de materiales. La calidad elegida se trata como un lote homogéneo. Retorno de recursos: solo materiales marcados como retornables. Tarifa de estación: <code>Item Value × 0,1125 × tarifa / 100</code>, usando el valor del dump cuando está disponible. El precio de estación cambia por edificio; consúltalo en juego. El impuesto es editable. Se separan el transporte de materiales y el transporte del lote terminado a Caerleon; la reserva de riesgo es manual y no predice muertes. Se agrupan órdenes BM de calidades iguales o inferiores a la calidad fabricada. La hora de descarga del libro no revela cuándo se originó el dato de AODP. AODP es una fuente comunitaria: puede haber datos incompletos, retrasados o cambios en las órdenes. El historial AODP se basa en órdenes de venta; las capturas del mejor precio comprador BM son un historial local acumulado por esta aplicación y solo comienzan cuando haces escaneos. Fuentes: <a href="https://west.albion-online-data.com/api-docs" target="_blank" rel="noopener">API y libro de órdenes AODP</a> · <a href="https://github.com/ao-data/ao-bin-dumps" target="_blank" rel="noopener">ao-bin-dumps</a> · <a href="https://albiondatabase.com/tools/crafting-calculator" target="_blank" rel="noopener">Fórmulas de crafting y retorno</a> · <a href="https://albionfreemarket.com/articles/view/how-crafting-station-fees-are-calculated-in-albion-online" target="_blank" rel="noopener">Cálculo de nutrición y tarifa de estación</a>.</div>
+<footer class="foot">Versión 10.3.1 · Herramienta comunitaria independiente. No está afiliada a Sandbox Interactive. Requiere Internet para recetas, iconos, precios e historial. Los datos guardados en seguimiento e historial BM permanecen en este navegador.</footer>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const SERVERS={west:'west',europe:'europe',east:'east'};
+const CITIES=['Bridgewatch','Fort Sterling','Lymhurst','Martlock','Thetford','Caerleon','Brecilien'];
+const DUMP_URLS=['https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/items.json','https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/master/items.json'];
+const ITEM_NAMES_URL='https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.txt';
+const RECIPE_CACHE_KEY='asm_pro_7_0_recipes_v2',SETTINGS_KEY='asm_pro_10_0_settings_v1',WATCHLIST_KEY='asm_pro_7_0_watchlist_v1',BM_SNAPSHOT_KEY='asm_pro_7_0_bm_snapshots_v1',PRICE_CACHE_TTL=90000,ORDERBOOK_CACHE_TTL=90000,HISTORY_CACHE_TTL=600000,REQUEST_DELAY_MS=1650,WATCHLIST_MAX=100,BM_SNAPSHOT_MAX=1800;
+const CITY_ID_MAP={'1002':'Lymhurst','2004':'Bridgewatch','3005':'Caerleon','3008':'Martlock','4002':'Fort Sterling','7':'Thetford','5003':'Brecilien','3003':'Black Market'};
+let apiRequestTail=Promise.resolve(),apiLastRequestAt=0,apiCooldownUntil=0;
+// Specialties follow the current Royal City crafting table. Keys are normalized
+// because dump subcategory labels can differ in punctuation/capitalization.
+const normalizeCategory=value=>String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+const CITY_BY_CATEGORY={
+ offhands:'Martlock',offhand:'Martlock',bags:'Brecilien',bag:'Brecilien',capes:'Brecilien',cape:'Brecilien',potions:'Brecilien',potion:'Brecilien',
+ gathering:'Caerleon',gatheringgear:'Caerleon',tools:'Caerleon',tool:'Caerleon',food:'Caerleon',cooked:'Caerleon',wargloves:'Caerleon',shapeshifterstaff:'Caerleon'
+};
+const CITY_BY_SUBCATEGORY={
+ // Especialidades de armas
+ sword:'Lymhurst',bow:'Lymhurst',arcanestaff:'Lymhurst',axe:'Martlock',quarterstaff:'Martlock',froststaff:'Martlock',mace:'Thetford',naturestaff:'Thetford',firestaff:'Thetford',hammer:'Fort Sterling',spear:'Fort Sterling',holystaff:'Fort Sterling',crossbow:'Bridgewatch',dagger:'Bridgewatch',cursestaff:'Bridgewatch',knuckles:'Caerleon',wargloves:'Caerleon',brawlergloves:'Caerleon',shapeshifterstaff:'Caerleon',
+ // Especialidades de armaduras (subcategorías normalizadas del dump)
+ leatherhelmet:'Lymhurst',leathershoes:'Lymhurst',plateshoes:'Martlock',platehelmet:'Fort Sterling',clotharmor:'Fort Sterling',platearmor:'Bridgewatch',clothshoes:'Bridgewatch',leatherarmor:'Thetford',clothhelmet:'Thetford',
+ // Otros
+ gatheringgear:'Caerleon',tool:'Caerleon',tools:'Caerleon',cooked:'Caerleon',food:'Caerleon',cape:'Brecilien',capes:'Brecilien',bag:'Brecilien',bags:'Brecilien',potion:'Brecilien',potions:'Brecilien',offhand:'Martlock',offhands:'Martlock'
+};
+const FAMILY_LABELS={all:'Todas las familias',weapons:'Armas',armor:'Armaduras',bags:'Bolsas',capes:'Capas',offhands:'Manos secundarias',gathering:'Equipo de recolección',tools:'Herramientas',consumables:'Consumibles',mounts:'Monturas',other:'Otros objetos'};
+const WEAPON_BRANCHES={
+ sword:{label:'Espadas',aliases:['sword','swords']},axe:{label:'Hachas',aliases:['axe','axes']},mace:{label:'Mazas',aliases:['mace','maces']},hammer:{label:'Martillos',aliases:['hammer','hammers']},spear:{label:'Lanzas',aliases:['spear','spears']},dagger:{label:'Dagas',aliases:['dagger','daggers']},quarterstaff:{label:'Bastones de combate',aliases:['quarterstaff','quarterstaffs']},bow:{label:'Arcos',aliases:['bow','bows']},crossbow:{label:'Ballestas',aliases:['crossbow','crossbows']},arcanestaff:{label:'Bastones arcanos',aliases:['arcanestaff','arcanestaffs','arcane']},cursestaff:{label:'Bastones malditos',aliases:['cursestaff','cursedstaff','cursestaffs']},firestaff:{label:'Bastones de fuego',aliases:['firestaff','firestaffs']},froststaff:{label:'Bastones de hielo',aliases:['froststaff','froststaffs']},holystaff:{label:'Bastones sagrados',aliases:['holystaff','holystaffs']},naturestaff:{label:'Bastones de naturaleza',aliases:['naturestaff','naturestaffs']},knuckles:{label:'Guantes de guerra',aliases:['knuckles','wargloves','warglove','brawlergloves']},shapeshifterstaff:{label:'Bastones cambiaformas',aliases:['shapeshifterstaff','shapeshifter']},other:{label:'Otras armas',aliases:[]}
+};
+const WEAPON_ALIAS_MAP=Object.fromEntries(Object.entries(WEAPON_BRANCHES).flatMap(([key,value])=>value.aliases.map(alias=>[normalizeCategory(alias),key])));
+const ARMOR_BRANCHES={cloth:{label:'Tela'},leather:{label:'Cuero'},plate:{label:'Placas'},other:{label:'Otras armaduras'}};
+const OTHER_BRANCH_LABELS={bags:'Bolsas',capes:'Capas',offhands:'Manos secundarias',gathering:'Equipo de recolección',tools:'Herramientas',consumables:'Consumibles',mounts:'Monturas',other:'Otros objetos'};
+function weaponBranchFor(subcategory,id){
+ const sub=normalizeCategory(subcategory);if(WEAPON_ALIAS_MAP[sub])return WEAPON_ALIAS_MAP[sub];
+ const rest=String(id||'').toUpperCase().replace(/^T[1-8]_/, '');
+ const tests=[['crossbow',/CROSSBOW/],['arcanestaff',/ARCANE.?STAFF/],['cursestaff',/CURSE.?STAFF/],['firestaff',/FIRE.?STAFF/],['froststaff',/FROST.?STAFF/],['holystaff',/HOLY.?STAFF/],['naturestaff',/NATURE.?STAFF/],['shapeshifterstaff',/SHAPESHIFTER/],['quarterstaff',/QUARTER.?STAFF/],['knuckles',/KNUCKLE|WAR.?GLOVE|BRAWLER.?GLOVE/],['sword',/SWORD/],['axe',/AXE/],['mace',/MACE/],['hammer',/HAMMER/],['spear',/SPEAR/],['dagger',/DAGGER/],['bow',/BOW/]];
+ for(const [key,pattern] of tests)if(pattern.test(rest))return key;
+ return 'other';
+}
+function isBlackMarketEligible(recipe){
+ const id=String(recipe?.id||'').toUpperCase();
+ const base=id.replace(/@[0-4]$/,'');
+ const tier=Number((base.match(/^T([2-8])_/)||[])[1]||0);
+ if(tier<2||tier>8)return false;
+ // Tradeable elsewhere does not mean accepted by the Black Market.
+ if(/GATHERER|CRYSTAL|FISHING|MOUNT|POTION|MEAL|FOOD|JOURNAL|SEED|FARM|BACKPACK/.test(base))return false;
+ // Legacy Black Hands remain in some item dumps but are no longer tradeable.
+ if(/^T[2-8]_2H_IRONGAUNTLETS_HELL$/.test(base))return false;
+ // Ordinary gathering tools are BM-eligible only at enchantment .0.
+ if(base.includes('_TOOL_'))return !id.includes('@')&&/^T[2-8]_2H_TOOL_(?:AXE|PICK(?:AXE)?|SICKLE|KNIFE|SKINNING|HAMMER|STONEHAMMER)$/.test(base);
+ return /^T[2-8]_(?:MAIN_|2H_|OFF_|HEAD_|ARMOR_|SHOES_|BAG(?:_|$)|CAPE(?:_|$)|CAPEITEM(?:_|$))/.test(base);
+}
+function classifyRecipe(recipe){
+ const category=normalizeCategory(recipe?.category),sub=normalizeCategory(recipe?.subcategory),id=String(recipe?.id||'').toUpperCase();
+ const combined=`${sub} ${id}`;
+ // Tool IDs also begin with 2H_; classify them before the generic weapon rule.
+ if(/TOOL/.test(category+' '+sub+' '+id))return {family:'tools',branch:'tools',familyLabel:'Herramientas BM',branchLabel:'Herramientas de recolección'};
+ if(sub==='bag'||/BAG/.test(sub)||/(^|_)BAG$/.test(id)||category==='bags'||category==='bag')return {family:'bags',branch:'bags',familyLabel:FAMILY_LABELS.bags,branchLabel:'Bolsas'};
+ if(sub==='cape'||/CAPE/.test(sub)||/(^|_)CAPE$/.test(id)||category==='capes'||category==='cape')return {family:'capes',branch:'capes',familyLabel:FAMILY_LABELS.capes,branchLabel:'Capas'};
+ if(category.includes('offhand')||category==='offhands'||sub==='offhand'||sub==='offhands'||/_OFF_/.test(id)||/^T[1-8]_OFF_/.test(id))return {family:'offhands',branch:'offhands',familyLabel:FAMILY_LABELS.offhands,branchLabel:'Manos secundarias'};
+ const weaponBranch=weaponBranchFor(sub,id);
+ const weaponEvidence=category.includes('weapon')||/^T[1-8]_(MAIN_|2H_)/.test(id)||['sword','axe','mace','hammer','spear','dagger','quarterstaff','bow','crossbow','arcanestaff','cursestaff','firestaff','froststaff','holystaff','naturestaff','knuckles','shapeshifterstaff'].includes(sub);
+ if(weaponEvidence)return {family:'weapons',branch:weaponBranch,familyLabel:FAMILY_LABELS.weapons,branchLabel:WEAPON_BRANCHES[weaponBranch].label};
+ const armorEvidence=category.includes('armor')||category.includes('armour')||/(helmet|armor|shoes|robe|hood|jacket|cowl|sandals|boots)/.test(sub)||/^T[1-8]_(HEAD_|ARMOR_|SHOES_)/.test(id);
+ if(armorEvidence){const material=/CLOTH/.test(combined)?'cloth':/LEATHER/.test(combined)?'leather':/PLATE/.test(combined)?'plate':'other';return {family:'armor',branch:material,familyLabel:FAMILY_LABELS.armor,branchLabel:ARMOR_BRANCHES[material].label};}
+ if(category.includes('gathering')||sub.includes('gathering')||/GATHERER/.test(id))return {family:'gathering',branch:'gathering',familyLabel:FAMILY_LABELS.gathering,branchLabel:OTHER_BRANCH_LABELS.gathering};
+ if(category.includes('tool')||sub==='tool'||sub==='tools'||/TOOL/.test(id))return {family:'tools',branch:'tools',familyLabel:FAMILY_LABELS.tools,branchLabel:OTHER_BRANCH_LABELS.tools};
+ if(category.includes('consumable')||['food','cooked','potion','potions'].includes(sub)||/MEAL|POTION/.test(id))return {family:'consumables',branch:'consumables',familyLabel:FAMILY_LABELS.consumables,branchLabel:OTHER_BRANCH_LABELS.consumables};
+ if(category.includes('mount')||/MOUNT/.test(id))return {family:'mounts',branch:'mounts',familyLabel:FAMILY_LABELS.mounts,branchLabel:OTHER_BRANCH_LABELS.mounts};
+ return {family:'other',branch:'other',familyLabel:FAMILY_LABELS.other,branchLabel:OTHER_BRANCH_LABELS.other};
+}
+let pendingBranchFilter=null;
+function getScopedRecipes(ignoreBranch=false){
+ const family=$('familyFilter')?.value||'all',branch=$('branchFilter')?.value||'all';
+ return [...recipes.values()].filter(recipe=>{if(!isBlackMarketEligible(recipe))return false;const cls=classifyRecipe(recipe);if(family!=='all'&&cls.family!==family)return false;if(!ignoreBranch&&branch!=='all'&&cls.branch!==branch)return false;return true;});
+}
+function updateFilterUI(){
+ const familySelect=$('familyFilter'),branchSelect=$('branchFilter');if(!familySelect||!branchSelect)return;
+ const family=familySelect.value||'all';
+ const previous=pendingBranchFilter!==null?pendingBranchFilter:(branchSelect.value||'all');
+ const familyRecipes=family==='all'?[]:getScopedRecipes(true);
+ const branches=new Map();for(const recipe of familyRecipes){const cls=classifyRecipe(recipe);branches.set(cls.branch,cls.branchLabel);}
+ const options=['<option value="all">Todas las ramas</option>',...([...branches.entries()].sort((a,b)=>a[1].localeCompare(b[1],'es')).map(([key,label])=>`<option value="${esc(key)}">${esc(label)}</option>`))];
+ branchSelect.innerHTML=options.join('');
+ branchSelect.disabled=family==='all'||branches.size<=1;
+ branchSelect.value=branches.has(previous)?previous:'all';
+ pendingBranchFilter=null;
+ const count=getScopedRecipes().length,total=[...recipes.values()].filter(isBlackMarketEligible).length;
+ $('scopeCount').textContent=recipeLoaded?`${fmt(count)} de ${fmt(total)} recetas`:'Preparando catálogo…';
+ const familyLabel=family==='all'?'Todo lo elegible para el BM':(FAMILY_LABELS[family]||FAMILY_LABELS.all);
+ $('scopeHint').innerHTML=family==='all'?'<span class="scope-help-icon">⌕</span><span>Se incluirán todas las familias que acepta el Mercado Negro. Elige una categoría para reducir el tiempo de consulta y concentrar el ranking.</span>':`<span class="scope-help-icon">⌕</span><span>${esc(familyLabel)}: ${fmt(familyRecipes.length)} recetas disponibles. ${branches.size>1?'Puedes limitar aún más el escaneo por rama.':'Se analizará esta familia completa.'}</span>`;
+ $('runScan').textContent=family==='all'&&branchSelect.value==='all'?'⌕ Escanear catálogo':`⌕ Escanear ${fmt(count)} recetas`;
+ $('runScan').disabled=!recipeLoaded||count===0||!!scanAbort;
+}
+function invalidateFilteredResults(){
+ if(scanAbort)return;scanRows=[];$('exportCsv').disabled=true;$('statBm').textContent='—';$('statDeals').textContent='—';$('statCovered').textContent='—';$('statMissing').textContent='—';$('resultCount').textContent='Filtro actualizado';
+ $('resultSub').textContent='El alcance del scanner ha cambiado. Ejecuta un nuevo análisis para actualizar el ranking.';
+ $('results').innerHTML='<div class="empty"><strong>Selección actualizada</strong>Ejecuta el scanner para consultar precios y calcular la rentabilidad de esta selección.</div>';
+}
+const $isFalse=value=>value===false||String(value).toLowerCase()==='false'||String(value)==='0';
+let recipes=new Map(),itemNames=new Map(),itemValues=new Map(),recipeLoaded=false,scanRows=[],scanAbort=null,scanCancelled=false;
+const priceCache=new Map(),orderbookCache=new Map(),historyCache=new Map();
+let latestScanContext=null,latestScanRows=[],watchlist=loadWatchlist(),bmSnapshots=loadBmSnapshots(),historyAbort=null;
+function setStatus(message,type=''){const el=$('status');el.textContent=message;el.className='status '+type;}
+function fmt(value,decimals=0){const n=Number(value);return Number.isFinite(n)?new Intl.NumberFormat('es-ES',{maximumFractionDigits:decimals}).format(n):'—';}
+function silver(value){return Number.isFinite(Number(value))?fmt(value)+' S':'—';}
+function esc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function asArray(value){return value==null?[]:(Array.isArray(value)?value:[value]);}
+function validItemId(id){return /^[A-Z0-9]+(?:_[A-Z0-9]+)+(?:@[0-4])?$/i.test(String(id||''));}
+function priceItemId(resource){
+ if(!resource||typeof resource!=='object')return '';
+ const uid=resource['@uniquename']||resource.uniquename||'';
+ if(!uid)return '';
+ const level=String(resource['@enchantmentlevel']??resource.enchantmentlevel??'0');
+ return level!=='0'&&!String(uid).includes('@')?`${uid}@${level}`:String(uid);
+}
+// Supports the XML-style dump (objects with @uniquename/@count), numbered
+// attributes, arrays, and compact maps such as {"T4_WOOD":4}.
+function readCraftResources(resource){
+ if(!resource)return [];
+ if(Array.isArray(resource))return resource.flatMap(readCraftResources);
+ if(typeof resource!=='object')return [];
+ const out=[];
+ const push=(id,qty,maxReturn)=>{
+  id=String(id||'');qty=Number(qty);
+  if(!validItemId(id)||!Number.isFinite(qty)||qty<=0)return;
+  out.push({id,qty,returns:maxReturn==null||String(maxReturn)!=='0'});
+ };
+ if(resource['@uniquename']||resource.uniquename){
+  const id=priceItemId(resource),qty=resource['@count']??resource.count;
+  push(id,qty,resource['@maxreturnamount']??resource.maxreturnamount);
+ }
+ const numberedKeys=Object.keys(resource).filter(k=>/^@uniquename\d+$/.test(k));
+ for(const key of numberedKeys){
+  const suffix=key.slice('@uniquename'.length),baseId=String(resource[key]||'');
+  const level=resource[`@enchantmentlevel${suffix}`]??resource['@enchantmentlevel'];
+  const id=level!=null&&String(level)!=='0'&&!baseId.includes('@')?`${baseId}@${level}`:baseId;
+  push(id,resource[`@count${suffix}`]??resource['@count'],resource[`@maxreturnamount${suffix}`]??resource['@maxreturnamount']);
+ }
+ // Some dumps / transformed recipes encode each material as an ID-keyed count.
+ for(const [key,value] of Object.entries(resource)){
+  if(validItemId(key)&&typeof value!=='object')push(key,value,resource['@maxreturnamount']);
+ }
+ // Merge duplicate IDs without losing the non-returnable flag.
+ const merged=new Map();
+ for(const m of out){const old=merged.get(m.id);if(old){old.qty+=m.qty;old.returns=old.returns&&m.returns;}else merged.set(m.id,{...m});}
+ return [...merged.values()];
+}
+function parseRequirement(requirement){
+ if(!requirement||typeof requirement!=='object')return null;
+ const materials=readCraftResources(requirement.craftresource);
+ if(!materials.length)return null;
+ const outputQty=Number(requirement['@amountcrafted']??requirement.amountcrafted??1);
+ const silverCost=Number(requirement['@silver']??requirement['@craftingsilver']??requirement.silver??requirement.craftingsilver??0);
+ return {materials,outputQty:Number.isFinite(outputQty)&&outputQty>0?outputQty:1,focus:Number(requirement['@craftingfocus']??requirement.craftingfocus??0),silverCost:Number.isFinite(silverCost)&&silverCost>0?silverCost:0};
+}
+function recipeCity(item){
+ const category=normalizeCategory(item?.['@shopcategory']);
+ const sub=normalizeCategory(item?.['@shopsubcategory1']);
+ const id=String(item?.['@uniquename']||'').toUpperCase();
+ const mapped=CITY_BY_CATEGORY[category]||CITY_BY_SUBCATEGORY[sub];
+ if(mapped)return mapped;
+ // Dump fallback for common specialty families whose metadata labels vary by patch.
+ if(/(^|_)BAG(_|$)/.test(id)||/(^|_)CAPE(_|$)/.test(id)||/POTION/.test(id))return 'Brecilien';
+ if(/GATHERING|GATHERER|TOOL|WARGLOVE|BRAWLERGLOVE|SHAPESHIFTER/.test(id))return 'Caerleon';
+ const weapon=weaponBranchFor(sub,id);if(CITY_BY_SUBCATEGORY[weapon])return CITY_BY_SUBCATEGORY[weapon];
+ const armorPatterns=[[/HEAD_CLOTH/,'clothhelmet'],[/ARMOR_CLOTH/,'clotharmor'],[/SHOES_CLOTH/,'clothshoes'],[/HEAD_LEATHER/,'leatherhelmet'],[/ARMOR_LEATHER/,'leatherarmor'],[/SHOES_LEATHER/,'leathershoes'],[/HEAD_PLATE/,'platehelmet'],[/ARMOR_PLATE/,'platearmor'],[/SHOES_PLATE/,'plateshoes']];
+ for(const [pattern,key] of armorPatterns)if(pattern.test(id)&&CITY_BY_SUBCATEGORY[key])return CITY_BY_SUBCATEGORY[key];
+ return '';
+}
+function fallbackName(item,id){
+ const baseId=String(id).replace(/@[0-4]$/,'');
+ const localized=itemNames.get(id)||itemNames.get(baseId);
+ if(localized)return String(id).includes('@')?`${localized} (+${String(id).split('@').pop()})`:localized;
+ const candidate=item?.['@name']||item?.['@localizationname']||item?.name||item?.localization?.en||item?.localization?.['en-us'];
+ if(typeof candidate==='string'&&candidate.trim()&&!candidate.startsWith('@'))return candidate.trim();
+ const tier=(baseId.match(/^T([1-8])_/)||[])[1];
+ const name=baseId.replace(/^T[1-8]_/, '').replace(/_/g,' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
+ return `${tier?`T${tier} · `:''}${name}${String(id).includes('@')?` (+${String(id).split('@').pop()})`:''}`;
+}
+function parseItemNames(text){
+ const out=new Map();
+ for(const line of String(text||'').split(/\r?\n/)){
+  let m=line.match(/^\s*\d+\s*:\s*([^:]+?)\s*:\s*(.*?)\s*$/);
+  if(!m)m=line.match(/^\s*([^:]+?)\s*:\s*(.*?)\s*$/);
+  if(m&&validItemId(m[1].trim())&&m[2].trim())out.set(m[1].trim(),m[2].trim());
+ }
+ return out;
+}
+function sameVariant(a,b){return JSON.stringify(a)===JSON.stringify(b);}
+function addRecipe(item){
+ const id=String(item?.['@uniquename']||'');
+ if(!validItemId(id)||$isFalse(item?.['@showinmarketplace']))return;
+ const variants=asArray(item.craftingrequirements).map(parseRequirement).filter(Boolean);
+ if(!variants.length)return;
+ const itemValue=Number(item?.['@itemvalue']);
+ const entry={id,name:fallbackName(item,id),city:recipeCity(item),category:String(item?.['@shopcategory']||''),subcategory:String(item?.['@shopsubcategory1']||''),itemValue:Number.isFinite(itemValue)&&itemValue>0?itemValue:null,variants};
+ const old=recipes.get(id);
+ if(old){for(const variant of variants)if(!old.variants.some(v=>sameVariant(v,variant)))old.variants.push(variant);if(!old.city&&entry.city)old.city=entry.city;if(!old.itemValue&&entry.itemValue)old.itemValue=entry.itemValue;if(old.name===old.id&&entry.name!==entry.id)old.name=entry.name;}
+ else recipes.set(id,entry);
+}
+function addEnchantedRecipes(item){
+ const baseId=String(item?.['@uniquename']||'');
+ if(!validItemId(baseId)||$isFalse(item?.['@showinmarketplace']))return;
+ const levels=asArray(item?.enchantments?.enchantment);
+ for(const levelInfo of levels){
+  const level=String(levelInfo?.['@enchantmentlevel']||'');if(!/^[1-4]$/.test(level))continue;
+  const id=baseId.includes('@')?baseId:`${baseId}@${level}`;if(!validItemId(id))continue;
+  const variants=asArray(levelInfo?.craftingrequirements).map(parseRequirement).filter(Boolean);if(!variants.length)continue;
+  const current=recipes.get(id),levelItemValue=Number(levelInfo?.['@itemvalue']),entry={id,name:fallbackName(item,id),city:recipeCity(item),category:String(item?.['@shopcategory']||''),subcategory:String(item?.['@shopsubcategory1']||''),itemValue:Number.isFinite(levelItemValue)&&levelItemValue>0?levelItemValue:null,variants};
+  if(!current)recipes.set(id,entry);else{for(const variant of variants)if(!current.variants.some(v=>sameVariant(v,variant)))current.variants.push(variant);if(!current.itemValue&&entry.itemValue)current.itemValue=entry.itemValue;}
+ }
+}
+function walkDump(node){
+ if(!node||typeof node!=='object')return;
+ if(Array.isArray(node)){for(const child of node)walkDump(child);return;}
+ if(node['@uniquename']){const baseId=String(node['@uniquename']);const baseValue=Number(node['@itemvalue']);if(Number.isFinite(baseValue)&&baseValue>0)itemValues.set(baseId,baseValue);for(const lv of asArray(node?.enchantments?.enchantment)){const level=String(lv?.['@enchantmentlevel']||'');const value=Number(lv?.['@itemvalue']);if(/^[1-4]$/.test(level)&&Number.isFinite(value)&&value>0)itemValues.set(`${baseId}@${level}`,value);}addRecipe(node);addEnchantedRecipes(node);}
+ for(const [key,value] of Object.entries(node)){if(key!=='enchantments')walkDump(value);}
+}
+function updateRecipeStats(){ $('statRecipes').textContent=fmt([...recipes.values()].filter(isBlackMarketEligible).length); }
+function saveRecipeCache(){
+ try{const payload={version:3,appVersion:'10.3.1',savedAt:Date.now(),recipeCount:recipes.size,recipes:[...recipes.values()],names:[...itemNames.entries()],values:[...itemValues.entries()]};localStorage.setItem(RECIPE_CACHE_KEY,JSON.stringify(payload));}
+ catch(error){console.warn('No se pudo guardar la caché local de recetas',error);}
+}
+function restoreRecipeCache(){
+ try{const raw=localStorage.getItem(RECIPE_CACHE_KEY);if(!raw)return false;const payload=JSON.parse(raw);if(![2,3].includes(Number(payload?.version))||!Array.isArray(payload.recipes)||!payload.recipes.length)return false;
+  recipes=new Map(payload.recipes.filter(r=>r&&validItemId(r.id)&&Array.isArray(r.variants)).map(r=>[r.id,r]));itemNames=new Map(Array.isArray(payload.names)?payload.names:[]);itemValues=new Map(Array.isArray(payload.values)?payload.values:[]);recipeLoaded=recipes.size>0;if(!recipeLoaded)return false;
+  updateRecipeStats();updateFilterUI();const ageDays=(Date.now()-Number(payload.savedAt||0))/86400000;setStatus(`Base local lista: ${fmt(recipes.size)} recetas · caché de ${fmt(ageDays,1)} días.`,'ok');$('resultSub').textContent=`Base local cargada · ${fmt(recipes.size)} recetas · pulsa «Actualizar base» para buscar cambios.`;return true;
+ }catch(error){console.warn('Caché de recetas dañada',error);return false;}
+}
+async function loadRecipes(force=false){
+ if(scanAbort)return;
+ if(recipeLoaded&&!force){setStatus(`Base lista: ${fmt(recipes.size)} recetas.`,'ok');return;}
+ const oldRecipes=recipes,oldNames=itemNames,oldValues=itemValues,oldLoaded=recipeLoaded;
+ $('loadRecipes').disabled=true;$('runScan').disabled=true;setStatus('Descargando la base comunitaria de objetos y recetas…');
+ let lastError=null;
+ for(const url of DUMP_URLS){
+  try{
+   const dumpController=new AbortController();let dumpTimedOut=false;const dumpTimer=setTimeout(()=>{dumpTimedOut=true;dumpController.abort();},30000);
+   let response;try{response=await fetch(url,{cache:force?'reload':'default',signal:dumpController.signal});}catch(fetchError){if(dumpTimedOut)throw new Error('La descarga de recetas superó 30 segundos.');throw fetchError;}finally{clearTimeout(dumpTimer);}
+   if(!response.ok)throw new Error(`Dump HTTP ${response.status}`);
+   const dump=await response.json();if(!dump||!dump.items)throw new Error('El archivo no contiene la colección de objetos esperada.');
+   recipes=new Map();itemValues=new Map();walkDump(dump.items);if(!recipes.size)throw new Error('Se descargó el dump, pero no se reconocieron recetas.');
+   itemNames=new Map();
+   try{const namesController=new AbortController();let namesTimedOut=false;const namesTimer=setTimeout(()=>{namesTimedOut=true;namesController.abort();},20000);let namesResponse;try{namesResponse=await fetch(ITEM_NAMES_URL,{cache:force?'reload':'default',signal:namesController.signal});}catch(namesError){if(namesTimedOut)throw new Error('La descarga del catálogo de nombres superó 20 segundos.');throw namesError;}finally{clearTimeout(namesTimer);}if(namesResponse.ok){itemNames=parseItemNames(await namesResponse.text());for(const recipe of recipes.values())recipe.name=fallbackName(null,recipe.id);}}
+   catch(error){console.warn('Catálogo de nombres no disponible; se usarán IDs legibles.',error);}
+   recipeLoaded=true;saveRecipeCache();updateRecipeStats();updateFilterUI();$('statBm').textContent='—';$('statDeals').textContent='—';$('statCovered').textContent='—';$('statMissing').textContent='—';
+   setStatus(`Base actualizada: ${fmt(recipes.size)} recetas reconocidas.`,'ok');$('runScan').disabled=false;$('resultSub').textContent=`Base comunitaria actualizada · ${fmt(recipes.size)} recetas · caché guardada en este dispositivo.`;$('loadRecipes').disabled=false;return;
+  }catch(error){lastError=error;recipes=oldRecipes;itemNames=oldNames;itemValues=oldValues;console.warn('Error cargando dump',url,error);}
+ }
+ recipes=oldRecipes;itemNames=oldNames;itemValues=oldValues;recipeLoaded=oldLoaded;$('runScan').disabled=!recipeLoaded;$('loadRecipes').disabled=false;
+ setStatus(`No se pudo actualizar la base: ${lastError?.message||'error de conexión'}.`,'error');
+ if(!recipeLoaded)$('results').innerHTML='<div class="empty"><strong>No se pudo cargar la base.</strong>Comprueba Internet y vuelve a pulsar «Actualizar base de recetas».</div>';
+}
+function parseMarketDateMs(date){
+ if(!date)return NaN;
+ if(date instanceof Date)return date.getTime();
+ let raw=String(date).trim();
+ // AODP market timestamps are UTC; timestamps without an explicit zone are normalized to UTC.
+ if(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?$/.test(raw))raw+='Z';
+ return Date.parse(raw);
+}
+function ageHours(date){const ms=parseMarketDateMs(date);if(!Number.isFinite(ms)||new Date(ms).getUTCFullYear()<2000||ms>Date.now()+300000)return null;return Math.max(0,(Date.now()-ms)/3600000);}
+function dateInfo(date){const ms=parseMarketDateMs(date),future=Number.isFinite(ms)&&ms>Date.now()+300000,hours=ageHours(date);return {hours,valid:hours!==null,future};}
+function normalizeMarketCity(value){const raw=String(value??'').trim();if(CITY_ID_MAP[raw])return CITY_ID_MAP[raw];const key=normalizeCategory(raw);if(key==='blackmarket')return 'Black Market';return CITIES.find(city=>normalizeCategory(city)===key)||raw;}
+function priceKey(id,quality,city){return `${id}|${quality}|${normalizeMarketCity(city).toLowerCase()}`;}
+function chooseMarketSide(oldRow,newRow,priceField,dateField,preferLower){
+ const oldPrice=Number(oldRow?.[priceField]),newPrice=Number(newRow?.[priceField]);
+ const oldValid=Number.isFinite(oldPrice)&&oldPrice>0,newValid=Number.isFinite(newPrice)&&newPrice>0;
+ if(!newValid)return {price:oldValid?oldRow[priceField]:undefined,date:oldRow?.[dateField]};
+ if(!oldValid)return {price:newRow[priceField],date:newRow?.[dateField]};
+ const oldStamp=dateInfo(oldRow?.[dateField]),newStamp=dateInfo(newRow?.[dateField]);
+ if(newStamp.future)return {price:oldRow[priceField],date:oldRow?.[dateField]};
+ if(oldStamp.future)return {price:newRow[priceField],date:newRow?.[dateField]};
+ if(newStamp.valid&&!oldStamp.valid)return {price:newRow[priceField],date:newRow?.[dateField]};
+ if(oldStamp.valid&&!newStamp.valid)return {price:oldRow[priceField],date:oldRow?.[dateField]};
+ if(newStamp.valid&&oldStamp.valid&&newStamp.hours!==oldStamp.hours)return newStamp.hours<oldStamp.hours?{price:newRow[priceField],date:newRow?.[dateField]}:{price:oldRow[priceField],date:oldRow?.[dateField]};
+ const better=preferLower?newPrice<oldPrice:newPrice>oldPrice;
+ return better?{price:newRow[priceField],date:newRow?.[dateField]}:{price:oldRow[priceField],date:oldRow?.[dateField]};
+}
+function mergeMarketPriceRows(oldRow,newRow){
+ if(!oldRow)return {...newRow};
+ const merged={...oldRow,...newRow};
+ for(const [priceField,dateField,preferLower] of [['sell_price_min','sell_price_min_date',true],['buy_price_max','buy_price_max_date',false],['sell_price_max','sell_price_max_date',false],['buy_price_min','buy_price_min_date',true]]){
+  const side=chooseMarketSide(oldRow,newRow,priceField,dateField,preferLower);
+  if(side.price!==undefined)merged[priceField]=side.price;else delete merged[priceField];
+  if(side.date!==undefined)merged[dateField]=side.date;else delete merged[dateField];
+ }
+ return merged;
+}
+function addPrices(map,rows){
+ let accepted=0,rejected=0;
+ if(!Array.isArray(rows))return {accepted,rejected:1};
+ for(const row of rows){
+  const id=String(row?.item_id??row?.itemId??'').trim(),location=normalizeMarketCity(row?.city??row?.location??row?.location_name??row?.location_id??'');
+  const quality=Number(row?.quality);
+  if(!validItemId(id)||!location||!Number.isInteger(quality)||quality<1||quality>5){rejected++;continue;}
+  const positive=['sell_price_min','buy_price_max','sell_price_max','buy_price_min'].some(k=>Number.isFinite(Number(row?.[k]))&&Number(row[k])>0);
+  if(!positive){rejected++;continue;}
+  const key=priceKey(id,quality,location),old=map.get(key);
+  map.set(key,mergeMarketPriceRows(old,row));accepted++;
+ }
+ return {accepted,rejected};
+}
+function idBatches(values,size=80){const out=[];for(let i=0;i<values.length;i+=size)out.push(values.slice(i,i+size));return out;}
+function sleep(ms,signal){return new Promise((resolve,reject)=>{if(signal?.aborted){reject(new DOMException('Operación cancelada','AbortError'));return;}const timer=setTimeout(done,ms);function done(){signal?.removeEventListener('abort',abort);resolve();}function abort(){clearTimeout(timer);signal?.removeEventListener('abort',abort);reject(new DOMException('Operación cancelada','AbortError'));}signal?.addEventListener('abort',abort,{once:true});});}
+function retryAfterMs(header,resetHeader){
+ const now=Date.now();let wait=0;
+ if(header){const raw=String(header).trim(),numeric=Number(raw);if(Number.isFinite(numeric)&&numeric>0)wait=numeric*1000;else{const parsed=Date.parse(raw);if(Number.isFinite(parsed))wait=Math.max(0,parsed-now);}}
+ if(!wait&&resetHeader){const reset=Number(resetHeader);if(Number.isFinite(reset)&&reset>0)wait=Math.max(0,reset*1000-now+1500);}
+ return Math.max(0,wait);
+}
+async function fetchJson(url,signal,cache=priceCache,ttl=PRICE_CACHE_TTL){
+ const cached=cache.get(url);if(cached&&Date.now()-cached.time<ttl)return cached.data;
+ const previous=apiRequestTail;let unlock;apiRequestTail=new Promise(resolve=>unlock=resolve);
+ try{
+  await previous.catch(()=>{});
+  const wait=Math.max(0,apiLastRequestAt+REQUEST_DELAY_MS-Date.now(),apiCooldownUntil-Date.now());
+  if(wait>900000)throw new Error(`La API mantiene un límite activo durante ${fmt(wait/60000,1)} min. Se detuvo la consulta para no dejar la aplicación esperando; vuelve a probar cuando expire el límite.`);
+  if(wait>0)await sleep(wait,signal);
+  if(signal?.aborted)throw new DOMException('Operación cancelada','AbortError');
+  apiLastRequestAt=Date.now();
+  let response;const requestController=new AbortController();let timedOut=false;
+  const abortParent=()=>requestController.abort();
+  if(signal?.aborted)throw new DOMException('Operación cancelada','AbortError');
+  signal?.addEventListener('abort',abortParent,{once:true});
+  const timeout=setTimeout(()=>{timedOut=true;requestController.abort();},30000);
+  try{response=await fetch(url,{headers:{Accept:'application/json'},signal:requestController.signal,cache:'no-store'});}
+  catch(error){if(signal?.aborted)throw new DOMException('Operación cancelada','AbortError');const networkError=new Error(timedOut?'La consulta superó 30 segundos y se canceló.':`Fallo de conexión: ${error.message||'red no disponible'}`);networkError.transient=true;throw networkError;}
+  finally{clearTimeout(timeout);signal?.removeEventListener('abort',abortParent);}
+  if(response.status===429){const waitMs=retryAfterMs(response.headers.get('Retry-After'),response.headers.get('RateLimit-Reset'));apiCooldownUntil=Math.max(apiCooldownUntil,Date.now()+Math.max(waitMs,60000));const error=new Error('La API limitó temporalmente las consultas (HTTP 429).');error.rateLimited=true;error.retryAfterMs=Math.max(waitMs,60000);throw error;}
+  if([408,425,500,502,503,504].includes(response.status)){const error=new Error(`API temporalmente no disponible: HTTP ${response.status}.`);error.transient=true;error.retryAfterMs=retryAfterMs(response.headers.get('Retry-After'),null);throw error;}
+  if(!response.ok)throw new Error(`API de mercado: HTTP ${response.status}.`);
+  let data;try{data=await response.json();}catch(error){const parseError=new Error('La API devolvió una respuesta que no es JSON válido.');parseError.transient=true;throw parseError;}
+  if(data==null||(typeof data!=='object'))throw new Error('La API devolvió una estructura de datos inesperada.');
+  cache.set(url,{time:Date.now(),data});return data;
+ }finally{unlock();}
+}
+async function fetchJsonRetry(url,signal,cache=priceCache,ttl=PRICE_CACHE_TTL){
+ let attempt=0;
+ while(true){
+  try{return await fetchJson(url,signal,cache,ttl);}
+  catch(error){
+   if(signal?.aborted)throw error;
+   const transient=!!error.rateLimited||!!error.transient;
+   if(!transient||attempt>=3)throw error;
+   attempt++;
+   const wait= Math.max(1500,Number(error.retryAfterMs)||Math.pow(2,attempt)*2500);
+   if(wait>900000){error.message+=' La espera indicada supera 15 minutos; se detuvo el reintento automático para evitar bloquear el escaneo.';throw error;}
+   setStatus(`${error.rateLimited?'Límite de API':'Error temporal de red/servidor'}: esperando ${fmt(wait/1000)} s · intento ${attempt}/3…`,'warn');
+   await sleep(wait,signal);
+  }
+ }
+}
+function normalizeOrderLevels(source){
+ let list=Array.isArray(source)?source:(source&&typeof source==='object'?Object.values(source):[]);
+ const merged=new Map();
+ for(const raw of list){const price=Number(raw?.unit_price??raw?.unitPrice??raw?.price??raw?.price_per_unit??0),amount=Number(raw?.amount??raw?.quantity??raw?.volume??raw?.available_amount??raw?.availableAmount??0);if(!Number.isFinite(price)||price<=0||!Number.isFinite(amount)||amount<=0)continue;const key=String(price);const old=merged.get(key);if(old)old.amount+=amount;else merged.set(key,{price,amount,expires:raw?.expires??raw?.expiration??null});}
+ return [...merged.values()].sort((a,b)=>b.price-a.price);
+}
+function addOrderBooks(map,payload,defaultQuality=null){
+ let rows=[];
+ if(Array.isArray(payload))rows=payload;
+ else if(payload&&typeof payload==='object'){
+  const nested=payload.orderbooks??payload.order_books??payload.data??payload.items;
+  if(Array.isArray(nested))rows=nested;
+  else if(payload.item_id||payload.itemId||payload.unique_name||payload.buy_orders||payload.buyOrders)rows=[payload];
+  else rows=Object.entries(payload).filter(([,v])=>v&&typeof v==='object').map(([id,v])=>({item_id:id,...v}));
+ }
+ let added=0;
+ for(const row of rows){
+  const id=String(row?.item_id??row?.itemId??row?.unique_name??row?.uniqueName??row?.id??'').trim();
+  let city=normalizeMarketCity(row?.city??row?.location??row?.location_name??row?.locationName??row?.location_id??row?.locationId??'Black Market');
+  if(!validItemId(id))continue;
+  const rawQuality=row?.quality??row?.item_quality??row?.itemQuality??defaultQuality;
+  const quality=Number(rawQuality);if(!Number.isInteger(quality)||quality<1||quality>5)continue;
+  const rawBuys=row?.buy_orders??row?.buyOrders??row?.buy_order??row?.bids??row?.buy??[];
+  const levels=normalizeOrderLevels(rawBuys).map(level=>({...level,quality}));
+  map.set(priceKey(id,quality,city),{itemId:id,city,quality,levels,capturedAt:Date.now()});added++;
+ }
+ return added;
+}
+function getOrderbookUrl(server,ids,locations,qualities){
+ const path=encodeURIComponent(ids.join(','));const params=new URLSearchParams({locations:locations.join(','),qualities:qualities.join(',')});return `https://${server}.albion-online-data.com/api/v2/stats/orderbook/${path}.json?${params.toString()}`;
+}
+function simulateSellIntoBids(levels,quantity){
+ const target=Math.max(1,Math.ceil(Number(quantity)||1));let remaining=target,filled=0,gross=0;const used=[];
+ for(const level of levels||[]){if(remaining<=0)break;const take=Math.min(remaining,level.amount);if(take<=0)continue;gross+=take*level.price;filled+=take;remaining-=take;used.push({price:level.price,amount:take,total:take*level.price});}
+ const available=(levels||[]).reduce((sum,level)=>sum+level.amount,0);
+ return {target,filled,unfilled:Math.max(0,target-filled),available,gross,average:filled>0?gross/filled:0,fullyCovered:remaining<=0,levelsUsed:used};
+}
+function parseBonus(recipe,city,settings,variant=null){
+ if(settings.rrrMode==='manual')return Math.min(1,Math.max(0,settings.manualReturn));
+ const baseBonus=0.18;
+ const specialtyBonus=recipe.city&&recipe.city===city?0.15:0;
+ const focusBonus=settings.useFocus&&Number(variant?.focus)>0?0.59:0;
+ const productionBonus=settings.dailyBonus;
+ const totalBonus=baseBonus+specialtyBonus+focusBonus+productionBonus;
+ return totalBonus/(1+totalBonus);
+}
+function materialCostForVariant(variant,priceMap,craftCity,returnRate,maxAge,strictDates,sourceMode='craft',transportPerCity=0,craftBatches=1){
+ const missing=[],dates=[],materials=[];let stale=false,noDate=false,futureDate=false;
+ const effective=(m)=>m.returns?m.qty*(1-returnRate):m.qty;
+ const sourceCities=sourceMode==='cheapest'?CITIES:[craftCity];
+ const options=variant.materials.map(material=>{
+  const rows=sourceCities.map(city=>({city,row:priceMap.get(priceKey(material.id,1,city))})).filter(x=>x.row&&Number(x.row.sell_price_min)>0);
+  const evaluated=rows.map(x=>({...x,price:Number(x.row.sell_price_min),stamp:dateInfo(x.row.sell_price_min_date)})).filter(x=>Number.isFinite(x.price)&&x.price>0);
+  const notFuture=evaluated.filter(x=>!x.stamp.future);
+  const fresh=notFuture.filter(x=>x.stamp.valid&&x.stamp.hours<=maxAge);
+  const dated=notFuture.filter(x=>x.stamp.valid);
+  const undated=notFuture.filter(x=>!x.stamp.valid);
+  const valid=fresh.length?fresh:(strictDates?[]:dated.length?dated:undated);
+  if(!valid.length){
+   if(evaluated.some(x=>x.stamp.future))futureDate=true;
+   if(dated.length)stale=true;else noDate=true;
+   missing.push(material.id+(evaluated.some(x=>x.stamp.future)?' (fecha futura inválida)':dated.length?' (cotización antigua)':' (sin fecha válida)'));
+   return {material,candidates:[]};
+  }
+  if(!fresh.length){if(valid.some(x=>!x.stamp.valid)){noDate=true;}else stale=true;}
+  return {material,candidates:valid};
+ });
+ if(missing.length)return {complete:false,total:0,missing,dates,materials,stale,noDate,futureDate,sourceCities:[],crossCitySources:[],sourceTransportTotal:0};
+ // Minimize landed input cost for the whole batch. Enumerate the 2^7 possible
+ // external-city sets; for each set choose the cheapest eligible quote per input.
+ // This avoids selecting a slightly cheaper market that creates an extra costly trip.
+ let best=null;
+ const masks=sourceMode==='cheapest'&&transportPerCity>0?128:1;
+ for(let mask=0;mask<masks;mask++){
+  const allowed=sourceMode==='craft'?[craftCity]:sourceMode==='cheapest'?(transportPerCity>0?[craftCity,...CITIES.filter((_,i)=>mask&(1<<i))]:CITIES):[craftCity];
+  const assignment=[];let variableCost=0;let complete=true;
+  for(const entry of options){
+   const choices=entry.candidates.filter(x=>allowed.includes(x.city)).sort((a,b)=>a.price-b.price||(a.city===craftCity?-1:b.city===craftCity?1:0));
+   if(!choices.length){complete=false;break;}
+   const chosen=choices[0];assignment.push({...chosen,material:entry.material});variableCost+=effective(entry.material)*chosen.price*craftBatches;
+  }
+  if(!complete)continue;
+  const external=[...new Set(assignment.map(x=>x.city).filter(city=>city!==craftCity))];
+  const transport=external.length*Math.max(0,Number(transportPerCity)||0);
+  const landed=variableCost+transport;
+  if(!best||landed<best.landed)best={assignment,external,landed,variableCost,transport};
+ }
+ if(!best)return {complete:false,total:0,missing:variant.materials.map(m=>m.id),dates,materials,stale,noDate,futureDate,sourceCities:[],crossCitySources:[],sourceTransportTotal:0};
+ let total=0;const usedCities=new Set();
+ for(const chosen of best.assignment){
+  const m=chosen.material,stamp=chosen.stamp,qty=effective(m),subtotal=chosen.price*qty;
+  total+=subtotal;usedCities.add(chosen.city);
+  if(stamp.valid){dates.push(chosen.row.sell_price_min_date);if(stamp.hours>maxAge)stale=true;}
+  else noDate=true;
+  if(stamp.future)futureDate=true;
+  materials.push({id:m.id,qty:m.qty,effectiveQty:qty,unitPrice:chosen.price,subtotal,returns:m.returns,date:chosen.row.sell_price_min_date,ageHours:stamp.hours,sourceCity:chosen.city});
+ }
+ // `total` is the material spend for every craft batch in this simulation;
+ // inbound transport stays separate so candidateForRecipe can price it once.
+ // `materials[].subtotal` remains a per-craft-batch breakdown for display/risk.
+ return {complete:true,total:best.variableCost,missing,dates,materials,stale,noDate,futureDate,sourceCities:[...usedCities],crossCitySources:best.external,sourceTransportTotal:best.transport};
+}
+function resolveMaterialItemValue(itemId,seen=new Set()){
+ const id=String(itemId||'');if(!validItemId(id)||seen.has(id))return null;
+ const direct=Number(itemValues.get(id));if(Number.isFinite(direct)&&direct>0)return direct;
+ const recipe=recipes.get(id);if(!recipe||!Array.isArray(recipe.variants)||!recipe.variants.length)return null;
+ const nextSeen=new Set(seen);nextSeen.add(id);
+ // Prefer the first canonical recipe variant; all ingredients are valued at
+ // their full recipe requirement, independent of RRR or market price.
+ const variant=recipe.variants[0];let total=0;
+ for(const material of variant.materials){const value=resolveMaterialItemValue(material.id,nextSeen);if(value==null)return null;total+=value*material.qty;}
+ return Number(variant.outputQty)>0&&total>0?total/variant.outputQty:null;
+}
+function resolveItemValue(recipe,variant){
+ const direct=Number(recipe?.itemValue);if(Number.isFinite(direct)&&direct>0)return {value:direct,estimated:false,complete:true};
+ let total=0,complete=true;
+ for(const material of variant.materials){const value=resolveMaterialItemValue(material.id);if(value==null){complete=false;continue;}total+=value*material.qty;}
+ return {value:complete&&total>0?total/variant.outputQty:null,estimated:true,complete};
+}
+function getSettings(){
+ const tax=Math.min(100,Math.max(0,Number($('tax').value)||0))/100;
+ return {server:SERVERS[$('server').value]||'west',cityMode:$('city').value,materialSourceMode:$('materialSourceMode').value||'craft',sourceTransportPerCity:Math.max(0,Number($('sourceTransportPerCity').value)||0),finishedTransportPerBatch:Math.max(0,Number($('finishedTransportPerBatch').value)||0),transportRiskPct:Math.min(100,Math.max(0,Number($('transportRiskPct').value)||0)),quality:Math.min(5,Math.max(1,Number($('quality').value)||1)),tax,rrrMode:$('rrrMode').value,manualReturn:Math.min(100,Math.max(0,Number($('returnRate').value)||0))/100,useFocus:$('useFocus').checked,dailyBonus:Math.min(.2,Math.max(0,Number($('dailyBonus').value)||0)),stationFee:Math.min(1000,Math.max(0,Number($('stationFee').value)||0)),otherCost:Math.max(0,Number($('otherCost').value)||0),silverPerFocus:Math.max(0,Number($('silverPerFocus').value)||0),batchQty:Math.min(5000,Math.max(1,Math.floor(Number($('batchQty').value)||1))),requireFullDepth:$('requireFullDepth').checked,minProfit:Math.max(0,Number($('minProfit').value)||0),minROI:Math.max(0,Number($('minROI').value)||0),maxAge:Number($('maxAge').value)||24,strictDates:$('strictDates').checked,limit:Number($('limit').value)||100,sortBy:$('sortBy').value};
+}
+const SETTING_IDS=['server','city','materialSourceMode','sourceTransportPerCity','finishedTransportPerBatch','transportRiskPct','quality','tax','minProfit','minROI','batchQty','maxAge','limit','rrrMode','returnRate','dailyBonus','stationFee','otherCost','silverPerFocus','useFocus','strictDates','requireFullDepth','sortBy','familyFilter','branchFilter','cargoWeightKg','cargoValueSilver','oxCapacityKg','loadSafetyPct','tripMinutes','tripCostSilver','lethalSharePct','deathChancePct','oxGearValue'];
+function restoreSettings(){try{const data=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');for(const id of SETTING_IDS){if(data[id]===undefined)continue;if(id==='branchFilter'){pendingBranchFilter=String(data[id]);continue;}const el=$(id);if(el.type==='checkbox')el.checked=Boolean(data[id]);else if(el.tagName==='SELECT'||el.tagName==='INPUT')el.value=String(data[id]);}}catch(error){console.warn('No se pudieron recuperar los ajustes',error);}const family=$('familyFilter');if(family&&![...family.options].some(o=>o.value===family.value))family.value='all';const branch=$('branchFilter');if(branch)branch.value='all';updateRrrControls();}
+function saveSettings(){try{const data={};for(const id of SETTING_IDS){const el=$(id);data[id]=el.type==='checkbox'?el.checked:el.value;}localStorage.setItem(SETTINGS_KEY,JSON.stringify(data));}catch(error){console.warn('No se pudieron guardar los ajustes',error);}}
+function updateRrrControls(){$('returnRate').disabled=$('rrrMode').value!=='manual';}
+function eligibleBmData(itemId,quality,priceMap,bookMap){
+ const eligibleQualities=Array.from({length:Math.max(1,Number(quality)||1)},(_,i)=>i+1);
+ const books=eligibleQualities.map(q=>bookMap.get(priceKey(itemId,q,'Black Market'))).filter(Boolean);
+ const levels=books.flatMap(book=>(book.levels||[]).map(level=>({...level,quality:book.quality}))).sort((a,b)=>b.price-a.price||a.quality-b.quality);
+ const quotes=eligibleQualities.map(q=>({quality:q,row:priceMap.get(priceKey(itemId,q,'Black Market'))})).filter(x=>x.row&&Number(x.row.buy_price_max)>0).sort((a,b)=>Number(b.row.buy_price_max)-Number(a.row.buy_price_max));
+ return {eligibleQualities,books,levels,quote:quotes[0]||null,quotes};
+}
+function candidateForRecipe(recipe,priceMap,bookMap,settings){
+ const bm=eligibleBmData(recipe.id,settings.quality,priceMap,bookMap);
+ const levels=bm.levels;
+ const hasBook=levels.length>0;
+ const quoteRow=bm.quote?.row||null;
+ const quotePrice=Number(quoteRow?.buy_price_max)||0;
+ const bmPrice=hasBook?levels[0].price:quotePrice;
+ if(!bmPrice)return {reason:'noBM'};
+ const bmQuoteDate=dateInfo(quoteRow?.buy_price_max_date);
+ // AODP's orderbook endpoint does not expose the source timestamp. The local
+ // capture time is reported separately and is never misrepresented as source age.
+ if(!hasBook&&bmQuoteDate.future)return {reason:'noDate'};
+ if(!hasBook&&settings.strictDates&&!bmQuoteDate.valid)return {reason:'noDate'};
+ if(!hasBook&&bmQuoteDate.valid&&bmQuoteDate.hours>settings.maxAge)return {reason:'stale'};
+ const cities=settings.cityMode==='auto'?CITIES:[settings.cityMode];
+ let best=null,hadMaterials=false,hadStale=false,hadNoDate=false,hadDepthFailure=false,hadItemValueMissing=false,hadMissingMaterials=[];
+ for(const city of cities){
+  for(const variant of recipe.variants){
+   const rrr=parseBonus(recipe,city,settings,variant);
+   const craftBatches=Math.ceil(settings.batchQty/variant.outputQty);
+   const producedQty=craftBatches*variant.outputQty;
+   const calc=materialCostForVariant(variant,priceMap,city,rrr,settings.maxAge,settings.strictDates,settings.materialSourceMode,settings.sourceTransportPerCity,craftBatches);
+   if(!calc.complete){if(Array.isArray(calc.missing))hadMissingMaterials.push(...calc.missing);if(calc.stale)hadStale=true;if(calc.noDate||calc.futureDate)hadNoDate=true;continue;}
+   hadMaterials=true;if(calc.stale){hadStale=true;continue;}if(calc.noDate&&settings.strictDates){hadNoDate=true;continue;}
+   // Divide the full multi-batch material spend by actual produced units,
+   // not by the output of a single recipe execution.
+   const materialUnitCost=calc.total/producedQty;
+   const sourceTransportTotal=calc.sourceTransportTotal??calc.crossCitySources.length*settings.sourceTransportPerCity;
+   const sourceTransportPerUnit=sourceTransportTotal/producedQty;
+   const focusCostPerUnit=settings.useFocus&&Number(variant.focus)>0?(variant.focus*settings.silverPerFocus/variant.outputQty):0;
+   const recipeSilverPerUnit=(Number(variant.silverCost)||0)/variant.outputQty;
+   const itemValueInfo=resolveItemValue(recipe,variant);
+   const tierMatch=String(recipe.id).match(/^T([1-8])_/),itemTier=tierMatch?Number(tierMatch[1]):null;
+   const stationFeeExempt=itemTier!=null&&itemTier<=2;
+   if(settings.stationFee>0&&!stationFeeExempt&&itemValueInfo.value==null){hadItemValueMissing=true;continue;}
+   const stationFeePerUnit=!stationFeeExempt&&itemValueInfo.value!=null?itemValueInfo.value*.1125*(settings.stationFee/100):0;
+   const baseCostUnit=materialUnitCost+settings.otherCost+focusCostPerUnit+recipeSilverPerUnit+stationFeePerUnit+sourceTransportPerUnit;
+   const baseProductionCost=baseCostUnit*producedQty;
+   const finishedTransportTotal=city==='Caerleon'?0:settings.finishedTransportPerBatch;
+   // Reserve risk by transport leg. For externally sourced materials, only
+   // the value of those inputs is exposed on the inbound trip. For the
+   // finished-goods trip, the full production cost is exposed only when the
+   // crafting city is outside Caerleon. Avoid charging a full finished-goods
+   // loss reserve when crafting in Caerleon and only some inputs travel.
+   const sourceMaterialValueExposed=craftBatches*calc.materials.filter(m=>m.sourceCity!==city).reduce((sum,m)=>sum+(Number(m.qty)||0)*(Number(m.unitPrice)||0),0);
+   const finishedCargoValueExposed=city!=='Caerleon'?baseProductionCost:0;
+   const sourceTransportRiskBase=sourceMaterialValueExposed+sourceTransportTotal;
+   const finishedTransportRiskBase=finishedCargoValueExposed+finishedTransportTotal;
+   const riskBase=sourceTransportRiskBase+finishedTransportRiskBase;
+   const hasTransportExposure=riskBase>0;
+   const riskReserveTotal=riskBase*(settings.transportRiskPct/100);
+   const totalCost=baseProductionCost+finishedTransportTotal+riskReserveTotal;
+   const costUnit=totalCost/producedQty;
+   const simulation=hasBook?simulateSellIntoBids(levels,producedQty):null;
+   if(settings.requireFullDepth&&(!simulation||!simulation.fullyCovered)){hadDepthFailure=true;continue;}
+   const filledQty=simulation?simulation.filled:null;
+   const avgSalePrice=simulation?(simulation.filled?simulation.average:0):bmPrice;
+   const grossRevenue=simulation?simulation.gross:bmPrice*producedQty;
+   const netRevenue=grossRevenue*(1-settings.tax);
+   const batchProfit=netRevenue-totalCost;
+   const profit=producedQty>0?batchProfit/producedQty:0;
+   const netSaleUnit=producedQty>0?netRevenue/producedQty:0;
+   const roi=totalCost>0?batchProfit/totalCost*100:null;
+   // Adverse scenario: BM bids -10%, raw materials +10%; manual route costs remain fixed.
+   const stressLevels=levels.map(level=>({...level,price:level.price*.90}));
+   const stressSale=hasBook?simulateSellIntoBids(stressLevels,producedQty):{gross:bmPrice*.90*producedQty,filled:0,fullyCovered:false};
+   const stressMaterialTotal=materialUnitCost*producedQty*1.10;
+   const stressFixedBeforeRisk=(baseProductionCost-materialUnitCost*producedQty)+finishedTransportTotal;
+   const stressExternalMaterialValue=sourceMaterialValueExposed*1.10;
+   const stressFinishedCargoValue=city!=='Caerleon'?(stressFixedBeforeRisk-finishedTransportTotal+stressMaterialTotal):0;
+   const stressRiskBase=stressExternalMaterialValue+sourceTransportTotal+stressFinishedCargoValue+finishedTransportTotal;
+   const stressRisk=hasTransportExposure?stressRiskBase*(settings.transportRiskPct/100):0;
+   const stressCost=stressFixedBeforeRisk+stressMaterialTotal+stressRisk;
+   const stressProfit=stressSale.gross*(1-settings.tax)-stressCost;
+   const breakEvenBmPrice=producedQty>0?totalCost/(producedQty*(1-settings.tax)):null;
+   const materialAges=calc.materials.map(m=>m.ageHours).filter(value=>value!=null&&Number.isFinite(value));
+   const bmQuoteAgeHours=bmQuoteDate.valid?bmQuoteDate.hours:null;
+   const ageCandidates=[...materialAges];if(!hasBook&&bmQuoteAgeHours!=null)ageCandidates.push(bmQuoteAgeHours);
+   const materialMaxAgeHours=materialAges.length?Math.max(...materialAges):null;
+   const maxAgeHours=ageCandidates.length?Math.max(...ageCandidates):null;
+   const bookCapturedAt=bm.books.reduce((latest,b)=>Math.max(latest,Number(b.capturedAt)||0),0)||null;
+   const bookCaptureAgeMinutes=bookCapturedAt?Math.max(0,(Date.now()-bookCapturedAt)/60000):null;
+   const oldestDate=calc.materials.map(m=>m.date).filter(Boolean).sort((a,b)=>Date.parse(a)-Date.parse(b))[0]||(!hasBook?quoteRow?.buy_price_max_date||'':'');
+   const entry={id:recipe.id,name:recipe.name,city,quality:settings.quality,outputQty:variant.outputQty,craftBatches,producedQty,targetQty:settings.batchQty,materialBatchCost:calc.total,materialUnitCost,baseCostUnit,costUnit,bmPrice,avgSalePrice,netSaleUnit,profit,roi,batchProfit,totalCost,baseProductionCost,finishedTransportTotal,riskReserveTotal,transportRiskPct:settings.transportRiskPct,sourceMaterialValueExposed,finishedCargoValueExposed,riskBase,grossRevenue,netRevenue,stressProfit,stressCoverage:stressSale.filled??0,breakEvenBmPrice,quantityFilled:filledQty,quantityUnfilled:simulation?simulation.unfilled:null,availableDepth:simulation?simulation.available:null,coveragePct:simulation?simulation.filled/producedQty*100:null,depthComplete:simulation?simulation.fullyCovered:false,depthAvailable:!!simulation,bookLevels:simulation?simulation.levelsUsed:[],topBookLevels:levels.slice(0,8),bookCapturedAt,bookCaptureAgeMinutes,bmQuoteAgeHours,bmQuoteQuality:bm.quote?.quality??null,eligibleBmQualities:bm.eligibleQualities,bookQualitiesSeen:[...new Set(bm.books.map(b=>b.quality))],bestBidQuality:levels[0]?.quality??null,materialCount:variant.materials.length,materials:calc.materials,sourceCities:calc.sourceCities,crossCitySources:calc.crossCitySources,sourceTransportTotal,sourceTransportPerUnit,materialSourceMode:settings.materialSourceMode,rrr,rrrPercent:rrr*100,bmDate:quoteRow?.buy_price_max_date||'',maxAgeHours,materialMaxAgeHours,oldestDate,variantCount:recipe.variants.length,focusPerBatch:variant.focus||0,focusCostPerUnit,recipeSilverPerUnit,stationFeePerUnit,stationFeeRate:settings.stationFee,otherCost:settings.otherCost,stationItemValue:itemValueInfo.value,stationValueEstimated:itemValueInfo.estimated,stationValueComplete:itemValueInfo.complete,category:recipe.category,priceSource:simulation?'orderbook-mixed-quality':'price-snapshot',dataConfidence:simulation&&simulation.fullyCovered&&materialAges.length===calc.materials.length&&materialMaxAgeHours!=null&&materialMaxAgeHours<=settings.maxAge?'MEDIA':'BAJA',qualityAssumption:'fixed-100-percent'};
+   if(!best||entry.batchProfit>best.batchProfit)best=entry;
+  }
+ }
+ if(best)return best;
+ if(hadDepthFailure)return {reason:'depth'};if(hadItemValueMissing)return {reason:'missingItemValue'};if(hadStale)return {reason:'stale'};if(hadNoDate)return {reason:'noDate'};if(!hadMaterials)return {reason:'missingMaterials',missingMaterials:[...new Set(hadMissingMaterials)].slice(0,30)};
+ return {reason:'missing'};
+}
+function getPriceUrl(server,ids,locations,qualities){
+ const path=encodeURIComponent(ids.join(','));const params=new URLSearchParams({locations:locations.join(','),qualities:qualities.join(',')});return `https://${server}.albion-online-data.com/api/v2/stats/prices/${path}.json?${params.toString()}`;
+}
+function getOrderbookUrlForBlackMarket(server,ids,qualities){return getOrderbookUrl(server,ids,['Black Market'],Array.isArray(qualities)?qualities:[qualities]);}
+function ageLabel(hours){if(hours==null)return 'Sin fecha válida';if(hours<1)return `${Math.max(1,Math.round(hours*60))} min`;if(hours<48)return `${fmt(hours,1)} h`;return `${fmt(hours/24,1)} d`;}
+function renderRows(shown,meta){
+ if(!shown.length){$('results').innerHTML=`<div class="empty"><strong>No hay oportunidades con estos filtros.</strong>Recetas revisadas: ${fmt(meta.scanned)} · Sin precio BM: ${fmt(meta.noBM)} · Sin libro (estimación): ${fmt(meta.noBook||0)} · Datos antiguos: ${fmt(meta.stale)} · Datos incompletos: ${fmt(meta.missing)} · Sin cobertura requerida: ${fmt(meta.depth||0)}. Prueba ampliar la antigüedad o reducir la cantidad del lote.</div>`;return;}
+ const coverageLabel=r=>r.depthAvailable?`${fmt(r.quantityFilled)}/${fmt(r.producedQty)} · ${fmt(r.coveragePct,0)}%`: 'Sin profundidad';
+ const coverageClass=r=>!r.depthAvailable?'depth-none':r.depthComplete?'depth-good':'depth-mid';
+ const materialMarkup=r=>r.materials.map(m=>`<li><strong>${esc(m.id)}</strong> · ${fmt(m.qty,2)} requeridos → ${fmt(m.effectiveQty,2)} netos · ${silver(m.unitPrice)} c/u · ${silver(m.subtotal)} · compra: ${esc(m.sourceCity||'—')} ${m.returns?'':'<span class="pill warn">No retornable</span>'}</li>`).join('');
+ const levelsMarkup=r=>r.topBookLevels?.length?`<ul class="depth-levels">${r.topBookLevels.slice(0,5).map(level=>`<li><span>${silver(level.price)} <small>Q${level.quality||'?'}</small></span><strong>${fmt(level.amount)} unidades</strong></li>`).join('')}</ul>`:'<p class="footnote">No se recibieron niveles del libro de órdenes para esta captura.</p>';
+ const detailMarkup=r=>`<div style="margin-bottom:7px"><strong>Escenario de calidad:</strong> se supone que todo el lote sale Q${r.quality}; la calidad real puede variar. <strong>Producción simulada:</strong> ${fmt(r.producedQty)} unidades en ${fmt(r.craftBatches)} lote(s) de receta · objetivo ${fmt(r.targetQty)} · coste total ${silver(r.totalCost)} · ingreso neto ${r.depthAvailable?'según profundidad':'estimado al mejor precio'} ${silver(r.netRevenue)} · beneficio ${r.depthAvailable?'según captura':'estimado'} ${silver(r.batchProfit)}</div><div class="cost-breakdown"><span><b>Materiales / unidad</b><strong>${silver(r.materialUnitCost)}</strong></span><span><b>Estación / unidad</b><strong>${silver(r.stationFeePerUnit)}</strong></span><span><b>Coste receta / unidad</b><strong>${silver(r.recipeSilverPerUnit)}</strong></span><span><b>Foco valorizado / unidad</b><strong>${silver(r.focusCostPerUnit)}</strong></span><span><b>Transporte materiales / lote</b><strong>${silver(r.sourceTransportTotal||0)}</strong></span><span><b>Transporte producto a Caerleon</b><strong>${silver(r.finishedTransportTotal||0)}</strong></span><span><b>Materiales expuestos antes de fabricar</b><strong>${silver(r.sourceMaterialValueExposed||0)}</strong></span><span><b>Producto expuesto en ruta a Caerleon</b><strong>${silver(r.finishedCargoValueExposed||0)}</strong></span><span><b>Base de reserva de riesgo (${fmt(r.transportRiskPct||0,1)}%)</b><strong>${silver(r.riskBase||0)}</strong></span><span><b>Reserva de riesgo</b><strong>${silver(r.riskReserveTotal||0)}</strong></span><span><b>Otros costes / unidad</b><strong>${silver(r.otherCost||0)}</strong></span><span><b>Item Value aplicado</b><strong>${r.stationItemValue==null?'No disponible':fmt(r.stationItemValue,2)+(r.stationValueEstimated?' · derivado de receta':'')}</strong></span><span><b>Ciudades de compra</b><strong>${esc((r.sourceCities||[]).join(', ')||'—')}</strong></span></div><div class="risk-grid"><div class="risk-box"><span>Precio BM de equilibrio (venta completa)</span><strong>${r.breakEvenBmPrice==null?'—':silver(r.breakEvenBmPrice)}</strong></div><div class="risk-box"><span>Escenario adverso · BM −10% / materiales +10%</span><strong class="${r.stressProfit>=0?'risk-good':'risk-bad'}">${silver(r.stressProfit)}</strong></div><div class="risk-box"><span>Cobertura en escenario adverso</span><strong>${r.depthAvailable?fmt(r.stressCoverage)+' / '+fmt(r.producedQty):'No confirmada'}</strong></div></div><div><strong>Libro de compra BM — órdenes elegibles por calidad</strong><p class="footnote">Profundidad total abierta observada: <strong>${r.depthAvailable?fmt(r.availableDepth)+' unidades':'sin datos'}</strong>. Es el volumen visible de órdenes activas en esta captura, no compras por día ni volumen ejecutado. Calidades consultadas: ${esc((r.bookQualitiesSeen||[]).map(q=>'Q'+q).join(', ')||'sin libro')}. La orden acepta el objeto si su calidad es igual o superior a la mínima de la orden.</p>${levelsMarkup(r)}</div><div class="footnote">Confianza del dato: ${r.dataConfidence}. Media = cobertura completa y materiales con fechas dentro del máximo configurado; baja = profundidad parcial, cotizaciones sin fecha o calidad de datos limitada. El libro AODP no aporta fecha de origen verificable, por eso nunca se etiqueta como confianza alta. Calidad asumida: 100% del lote Q${r.quality}. <br>Cotización BM agregada: ${r.bmQuoteAgeHours==null?'sin fecha':ageLabel(r.bmQuoteAgeHours)} · Captura local del libro: ${r.bookCaptureAgeMinutes==null?'no disponible':fmt(r.bookCaptureAgeMinutes,1)+' min'} (no indica la antigüedad original de los datos AODP).</div><div style="margin:10px 0 5px"><strong>Materiales por lote de receta</strong></div><ul>${materialMarkup(r)}</ul><div style="margin-top:12px"><button class="detail-btn" type="button" data-watch-id="${esc(r.id)}">＋ Seguir este objeto</button></div>`;
+ const imageMarkup=(r,klass='itempic')=>{const icon=`https://render.albiononline.com/v1/item/${encodeURIComponent(r.id)}.png?quality=${r.quality}`;const fallback=`https://render.albiononline.com/v1/item/${encodeURIComponent(r.id.split('@')[0])}.png?quality=1`;return `<img class="${klass}" loading="lazy" decoding="async" src="${icon}" alt="Icono de ${esc(r.name)}" onerror="this.onerror=null;this.src='${fallback}';this.onerror=function(){this.style.display='none';this.nextElementSibling.hidden=false}"><span class="${klass} item-fallback" hidden>◈</span>`;};
+ const rows=shown.map((r,i)=>{
+  const ageClass=r.maxAgeHours==null?'age-warn':r.maxAgeHours<=6?'age-good':r.maxAgeHours<=24?'age-warn':'age-bad';const rowIndex=`details-${i}`;
+  return `<tr><td class="rank">${i+1}</td><td><div class="itemcell">${imageMarkup(r)}<div><div class="itemname">${esc(r.name)}</div><div class="itemid">${esc(r.id)}</div></div></div></td><td>${esc(r.city)}</td><td>${fmt(r.producedQty)}</td><td class="money">${silver(r.costUnit)}</td><td class="money">${silver(r.bmPrice)}</td><td class="money">${r.depthAvailable?silver(r.avgSalePrice):'—'}</td><td class="money profit">${silver(r.profit)}</td><td class="money ${r.batchProfit>=0?'profit':'loss'}">${silver(r.batchProfit)}</td><td class="roi">${r.roi==null?'—':fmt(r.roi,1)+'%'}</td><td class="${coverageClass(r)}">${coverageLabel(r)}</td><td class="depth-good">${r.depthAvailable?fmt(r.availableDepth):'—'}</td><td><span class="pill">${fmt(r.rrrPercent,2)}% RRR</span></td><td><span class="pill ${r.dataConfidence==='ALTA'?'good':r.dataConfidence==='MEDIA'?'warn':'bad'}">${r.dataConfidence}</span></td><td class="${ageClass}">Mat. ${ageLabel(r.materialMaxAgeHours)}<br><small>BM captura ${r.bookCaptureAgeMinutes==null?'—':fmt(r.bookCaptureAgeMinutes,1)+' min'}</small></td><td><button class="detail-btn" type="button" data-detail="${rowIndex}" aria-expanded="false">Desglose</button></td></tr><tr class="detail-row" id="${rowIndex}" hidden><td colspan="16"><div class="detail-content">${detailMarkup(r)}</div></td></tr>`;
+ }).join('');
+ const cards=shown.map((r,i)=>{
+  const ageClass=r.maxAgeHours==null?'age-warn':r.maxAgeHours<=6?'age-good':r.maxAgeHours<=24?'age-warn':'age-bad';const detailId=`mobile-details-${i}`;
+  return `<article class="result-card"><div class="result-card-top"><div class="result-card-item">${imageMarkup(r,'result-card-image')}<div class="result-card-copy"><strong>${esc(r.name)}</strong><small>${esc(r.id)} · ${esc(r.city)}</small></div></div><div class="result-card-profit"><small>Beneficio / unidad</small><strong class="${r.profit>=0?'':'loss'}">${silver(r.profit)}</strong></div></div><div class="card-metrics"><div class="card-metric"><span>Coste / unidad</span><strong>${silver(r.costUnit)}</strong></div><div class="card-metric"><span>Precio medio BM / unidad</span><strong>${r.depthAvailable?silver(r.avgSalePrice):'Estimado '+silver(r.bmPrice)}</strong></div><div class="card-metric"><span>${r.depthAvailable?'Beneficio inmediato del lote':'Beneficio estimado sin libro'}</span><strong class="${r.batchProfit>=0?'profit':'loss'}">${silver(r.batchProfit)}</strong></div><div class="card-metric"><span>ROI del lote</span><strong class="roi">${r.roi==null?'—':fmt(r.roi,1)+'%'}</strong></div><div class="card-metric"><span>Profundidad BM abierta observada</span><strong>${r.depthAvailable?fmt(r.availableDepth)+' unidades':'Sin libro disponible'}</strong></div></div><div class="depth-line"><span>Cobertura BM: <strong class="${coverageClass(r)}">${coverageLabel(r)}</strong></span><span>Producción: <strong>${fmt(r.producedQty)} u.</strong></span></div><div class="result-card-footer"><span class="pill">${fmt(r.rrrPercent,2)}% RRR</span><span class="pill ${r.dataConfidence==='ALTA'?'good':r.dataConfidence==='MEDIA'?'warn':'bad'}">Confianza ${r.dataConfidence}</span><span class="${ageClass}">Materiales: ${ageLabel(r.materialMaxAgeHours)} · BM libro: ${r.bookCaptureAgeMinutes==null?'—':fmt(r.bookCaptureAgeMinutes,1)+' min'}</span><button class="detail-btn" type="button" data-detail="${detailId}" aria-expanded="false">Desglose</button></div><div class="detail-content mobile-detail" id="${detailId}" hidden>${detailMarkup(r)}</div></article>`;
+ }).join('');
+ $('results').innerHTML=`<div class="desktop-results"><div class="tablewrap"><table><thead><tr><th>#</th><th>Objeto</th><th>Ciudad craft</th><th>Producción</th><th>Coste/u.</th><th>Mejor BM</th><th>Media BM lote</th><th>Beneficio/u.</th><th>Beneficio lote*</th><th>ROI lote</th><th>Cobertura BM</th><th>Profundidad BM (uds)</th><th>RRR</th><th>Confianza</th><th>Edad materiales / captura BM</th><th>Desglose</th></tr></thead><tbody>${rows}</tbody></table></div></div><div class="mobile-results">${cards}</div><div class="footnote">${fmt(meta.complete)} recetas con materiales y precio de salida válidos · ${fmt(meta.covered||0)} lotes con cobertura completa · ${fmt(meta.noBook||0)} sin libro BM · ${fmt(meta.noBM)} sin precio BM · ${fmt(meta.stale)} con cotizaciones antiguas · ${fmt(meta.missing)} incompletas. Profundidad BM = unidades en órdenes abiertas observadas, no volumen diario ejecutado. ${meta.warnings?.length?`
+Advertencias: ${meta.warnings.map(esc).join(' · ')}`:''} *Beneficio inmediato = ingreso neto de las órdenes cubiertas menos el coste de fabricar todo el lote; si la cobertura es parcial, el excedente queda sin vender y no se valora como ingreso.</div>`;
+}
+async function runScan(){
+ if(!recipeLoaded||!recipes.size){setStatus('Primero carga la base de recetas.','error');return;}if(scanAbort){setStatus('Ya hay un escaneo en ejecución.');return;}
+ const settings=getSettings(),allRecipes=getScopedRecipes();
+ if(!allRecipes.length){setStatus('No hay recetas en esta selección. Cambia la familia o la rama.','error');return;}
+ const allIds=[...new Set(allRecipes.flatMap(r=>[r.id,...r.variants.flatMap(v=>v.materials.map(m=>m.id))]))];
+ const outputIds=[...new Set(allRecipes.map(r=>r.id))];
+ const locations=[...CITIES,'Black Market'];
+ const qualities=Array.from({length:settings.quality},(_,i)=>i+1);const batches=idBatches(allIds,70),bookBatches=idBatches(outputIds,45),priceMap=new Map(),bookMap=new Map();
+ scanCancelled=false;scanAbort=new AbortController();$('runScan').disabled=true;$('loadRecipes').disabled=true;$('cancelScan').disabled=false;$('exportCsv').disabled=true;scanRows=[];
+ $('familyFilter').disabled=true;$('branchFilter').disabled=true;$('progress').style.width='0%';$('results').innerHTML='<div class="empty"><strong>Escaneo iniciado…</strong>Consultando precios de materiales y profundidad de órdenes del Mercado Negro.</div>';$('statBm').textContent='—';$('statDeals').textContent='—';$('statCovered').textContent='—';$('statMissing').textContent='—';
+ let noBM=0,missing=0,stale=0,noDate=0,depthExcluded=0,bmCount=0,complete=0,covered=0,noBook=0,bookError='',priceRowsAccepted=0,priceRowsRejected=0,bookRowsAccepted=0;
+ try{
+  for(let i=0;i<batches.length;i++){
+   if(scanCancelled||scanAbort.signal.aborted)throw new Error('Escaneo cancelado.');
+   const url=getPriceUrl(settings.server,batches[i],locations,qualities);
+   setStatus(`Precios y materiales: bloque ${i+1}/${batches.length} · ${fmt(Math.min((i+1)*70,allIds.length))}/${fmt(allIds.length)} IDs.`);
+   const data=await fetchJsonRetry(url,scanAbort.signal,priceCache,PRICE_CACHE_TTL);const priceCheck=addPrices(priceMap,data);priceRowsAccepted+=priceCheck.accepted;priceRowsRejected+=priceCheck.rejected;
+   $('progress').style.width=`${((i+1)/Math.max(1,batches.length)*55).toFixed(1)}%`;
+   if(i<batches.length-1)await sleep(REQUEST_DELAY_MS,scanAbort.signal);
+  }
+  if(scanCancelled||scanAbort.signal.aborted)throw new Error('Escaneo cancelado.');
+  try{
+   for(let i=0;i<bookBatches.length;i++){
+    if(scanCancelled||scanAbort.signal.aborted)throw new Error('Escaneo cancelado.');
+    const url=getOrderbookUrlForBlackMarket(settings.server,bookBatches[i],qualities);
+    setStatus(`Profundidad BM: bloque ${i+1}/${bookBatches.length} · ${fmt(Math.min((i+1)*45,outputIds.length))}/${fmt(outputIds.length)} objetos.`);
+    const data=await fetchJsonRetry(url,scanAbort.signal,orderbookCache,ORDERBOOK_CACHE_TTL);bookRowsAccepted+=addOrderBooks(bookMap,data,null);
+    $('progress').style.width=`${55+((i+1)/Math.max(1,bookBatches.length)*30).toFixed(1)}%`;
+    if(i<bookBatches.length-1)await sleep(REQUEST_DELAY_MS,scanAbort.signal);
+   }
+  }catch(error){if(scanCancelled||scanAbort.signal.aborted)throw error;bookError=error.message;console.warn('Profundidad del libro no disponible; se usarán precios agregados como estimación.',error);}
+  if(scanCancelled||scanAbort.signal.aborted)throw new Error('Escaneo cancelado.');
+  const candidates=[];
+  for(let i=0;i<allRecipes.length;i++){
+   if(scanCancelled)throw new Error('Escaneo cancelado.');
+   const recipe=allRecipes[i],result=candidateForRecipe(recipe,priceMap,bookMap,settings);
+   if(result.reason){if(result.reason==='noBM')noBM++;else if(result.reason==='stale')stale++;else if(result.reason==='noDate')noDate++;else if(result.reason==='depth')depthExcluded++;else missing++;continue;}
+   bmCount++;complete++;if(result.depthComplete)covered++;if(!result.depthAvailable)noBook++;
+   if(result.profit>=settings.minProfit&&(result.roi==null||result.roi>=settings.minROI))candidates.push(result);
+  }
+  if(settings.sortBy==='roi')candidates.sort((a,b)=>(b.roi??-Infinity)-(a.roi??-Infinity));
+  else if(settings.sortBy==='batch')candidates.sort((a,b)=>b.batchProfit-a.batchProfit);
+  else if(settings.sortBy==='liquidity')candidates.sort((a,b)=>(b.coveragePct??-1)-(a.coveragePct??-1));
+  else candidates.sort((a,b)=>b.profit-a.profit);
+  const shown=candidates.slice(0,settings.limit);scanRows=shown;
+  latestScanContext={priceMap,bookMap,settings:{...settings}};latestScanRows=candidates;
+  saveBmSnapshots(candidates.slice(0,BM_SNAPSHOT_MAX),settings);populateToolItemSelects(candidates);
+  $('progress').style.width='100%';$('statRecipes').textContent=fmt(allRecipes.length);$('statBm').textContent=fmt(bmCount);$('statDeals').textContent=fmt(candidates.length);$('statCovered').textContent=fmt(covered);$('statMissing').textContent=fmt(noBM+missing+stale+noDate+depthExcluded);
+  $('resultCount').textContent=`${fmt(candidates.length)} oportunidades`;$('resultSub').textContent=`${fmt(allRecipes.length)} recetas seleccionadas · ${fmt(priceMap.size)} cotizaciones válidas (${fmt(priceRowsRejected)} filas ignoradas) · ${fmt(bookMap.size)} libros BM/calidad · servidor ${settings.server.toUpperCase()} · lote objetivo ${fmt(settings.batchQty)} u.`;
+  const warnings=[];if(priceRowsRejected>0)warnings.push(`${fmt(priceRowsRejected)} registros de precios mal formados o sin calidad/ciudad fueron ignorados.`);if(settings.stationFee===0)warnings.push('Tarifa de estación configurada en 0 S: no se descuenta este coste.');if(settings.cityMode!=='Caerleon'&&settings.cityMode!=='auto'&&settings.finishedTransportPerBatch===0)warnings.push('Transporte del lote terminado configurado en 0 S: falta valorar el viaje a Caerleon.');if(settings.cityMode==='auto'&&settings.finishedTransportPerBatch===0)warnings.push('En modo Auto, el ranking aún no penaliza el transporte entre la ciudad elegida y Caerleon.');if(settings.materialSourceMode==='cheapest'&&settings.sourceTransportPerCity===0)warnings.push('Compra de materiales externa sin coste de transporte configurado.');if(settings.transportRiskPct===0&&(settings.cityMode!=='Caerleon'||settings.materialSourceMode==='cheapest'))warnings.push('Reserva de riesgo de transporte en 0%; no se incorpora una provisión por pérdidas.');renderRows(shown,{scanned:allRecipes.length,noBM,stale,missing:missing+noDate,depth:depthExcluded,complete,covered,noBook,warnings});$('exportCsv').disabled=!shown.length;
+  if(bookError)setStatus(`Escaneo terminado con estimación agregada: el libro BM no se pudo consultar (${bookError}).`, 'warn');
+  else if(!bookMap.size)setStatus('Escaneo terminado, pero la API no entregó profundidad BM; los precios de venta son estimaciones agregadas.','warn');
+  else if(warnings.length||noBook>0||covered<complete)setStatus(`Escaneo terminado con avisos: ${fmt(candidates.length)} oportunidades · ${fmt(covered)}/${fmt(complete)} lotes con profundidad completa · ${fmt(noBook)} sin libro BM. ${warnings[0]||'Hay resultados con cobertura parcial o solo cotización agregada; revisa cada tarjeta antes de producir.'}`,'warn');
+  else setStatus(`Escaneo terminado: ${fmt(allRecipes.length)} recetas · ${fmt(candidates.length)} oportunidades · ${fmt(covered)} lotes con profundidad completa.`,'ok');
+  saveSettings();try{localStorage.setItem('asm_pro_10_3_1_last_scan',String(Date.now()));}catch(storageError){console.warn('No se pudo guardar la fecha del último escaneo',storageError);}updateDataHealth();
+ }catch(error){
+  if(scanAbort?.signal.aborted||scanCancelled){setStatus('Escaneo cancelado. Ejecuta otro para obtener un ranking completo.');$('results').innerHTML='<div class="empty"><strong>Escaneo cancelado.</strong>No se muestran resultados parciales como si fueran un ranking completo.</div>';}
+  else{console.error(error);setStatus(`Error de escaneo: ${error.message}`,'error');$('results').innerHTML=`<div class="empty"><strong>No se pudo completar el escaneo.</strong>${esc(error.message)}<br>Comprueba la conexión y vuelve a intentarlo.</div>`;}
+ }finally{scanAbort=null;$('familyFilter').disabled=false;$('loadRecipes').disabled=false;$('cancelScan').disabled=true;updateFilterUI();}
+}
+
+/* ========================= PRO 9.0: CITY LAB, HISTORY & WATCHLIST ========================= */
+function loadWatchlist(){try{const v=JSON.parse(localStorage.getItem(WATCHLIST_KEY)||'[]');return Array.isArray(v)?v.filter(x=>x&&validItemId(x.id)).slice(0,WATCHLIST_MAX):[];}catch{return[];}}
+function saveWatchlist(){try{localStorage.setItem(WATCHLIST_KEY,JSON.stringify(watchlist.slice(-WATCHLIST_MAX)));}catch(error){console.warn('No se pudo guardar la lista de seguimiento',error);setWatchStatus('No hay espacio disponible para guardar la lista en este navegador.','error');}}
+function loadBmSnapshots(){try{const v=JSON.parse(localStorage.getItem(BM_SNAPSHOT_KEY)||'[]');return Array.isArray(v)?v.filter(x=>x&&validItemId(x.id)&&Number(x.bestBid)>0).slice(-BM_SNAPSHOT_MAX):[];}catch{return[];}}
+function saveBmSnapshots(rows,settings){
+ const now=Date.now();
+ for(const r of rows||[]){if(!r.depthAvailable||!r.topBookLevels?.length)continue;
+  const exact=r.topBookLevels.filter(level=>Number(level.quality)===Number(r.quality)).sort((a,b)=>b.price-a.price)[0];
+  const snap={id:r.id,name:r.name,server:settings.server,quality:r.quality,ts:now,bestBid:Number(r.topBookLevels[0].price),bestBidQuality:Number(r.bestBidQuality)||Number(r.quality)||1,bestExactBid:exact?Number(exact.price):null,eligibleQualities:r.eligibleBmQualities||[],depthQty:Number(r.availableDepth)||0,coveredQty:Number(r.quantityFilled)||0};
+  let recentIndex=-1;for(let i=bmSnapshots.length-1;i>=0;i--){const old=bmSnapshots[i];if(old.id===snap.id&&old.server===snap.server&&old.quality===snap.quality){recentIndex=i;break;}}const recent=recentIndex>=0?bmSnapshots[recentIndex]:null;if(recent&&now-recent.ts<60000)bmSnapshots[recentIndex]=snap;else bmSnapshots.push(snap);
+ }
+ bmSnapshots=bmSnapshots.slice(-BM_SNAPSHOT_MAX);try{localStorage.setItem(BM_SNAPSHOT_KEY,JSON.stringify(bmSnapshots));}catch(error){console.warn('No se pudieron guardar capturas BM',error);}
+}
+function populateToolItemSelects(rows){
+ const unique=new Map();for(const r of rows||[])if(r?.id)unique.set(`${r.id}|${r.quality}`,r);
+ const options=[...unique.values()].slice(0,800).map(r=>`<option value="${esc(r.id)}" data-quality="${r.quality}">${esc(r.name)} · ${esc(r.id)} · Q${r.quality}</option>`).join('');
+ for(const id of ['cityCompareItem','historyItem']){const el=$(id);if(!el)continue;const previous=el.value;el.innerHTML=options||'<option value="">No hay oportunidades; ejecuta otro escaneo</option>';if([...el.options].some(o=>o.value===previous))el.value=previous;}
+ $('runCityCompare').disabled=!options;$('loadHistory').disabled=!options;
+}
+function setToolStatus(id,message,type=''){const el=$(id);if(el){el.textContent=message;el.className='tool-status '+type;}}
+function setWatchStatus(message,type=''){setToolStatus('watchStatus',message,type);}
+function drawLineChart(containerId,points,valueKey,emptyText,caption){
+ const host=$(containerId);if(!host)return;
+ const cleaned=(points||[]).map(p=>({ts:Number(p.ts),value:Number(p[valueKey])})).filter(p=>Number.isFinite(p.ts)&&Number.isFinite(p.value)&&p.value>0).sort((a,b)=>a.ts-b.ts);
+ if(!cleaned.length){host.innerHTML=`<div class="chart-empty">${esc(emptyText)}</div>`;return;}
+ if(cleaned.length===1){host.innerHTML=`<div class="chart-empty">Una captura: ${silver(cleaned[0].value)} · ${new Date(cleaned[0].ts).toLocaleString('es-ES')}. Se necesitan al menos dos puntos para dibujar una tendencia.</div>`;return;}
+ const W=760,H=230,L=62,R=18,T=14,B=38,values=cleaned.map(p=>p.value),min=Math.min(...values),max=Math.max(...values),range=Math.max(1,max-min),xSpan=W-L-R,ySpan=H-T-B;
+ const x=i=>L+(i/(cleaned.length-1))*xSpan,y=v=>T+(max-v)/range*ySpan;
+ const path=cleaned.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
+ const grid=[0,1,2,3].map(i=>{const val=min+range*i/3,yy=y(val);return `<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#294235" stroke-width="1"/><text x="${L-9}" y="${yy+4}" text-anchor="end" fill="#8fa397" font-size="11">${fmt(val,0)}</text>`;}).join('');
+ const x1=new Date(cleaned[0].ts).toLocaleDateString('es-ES',{day:'2-digit',month:'short'}),x2=new Date(cleaned[cleaned.length-1].ts).toLocaleDateString('es-ES',{day:'2-digit',month:'short'});
+ const delta=cleaned[cleaned.length-1].value-cleaned[0].value,pct=cleaned[0].value?delta/cleaned[0].value*100:0;
+ host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico ${esc(caption)}"><title>${esc(caption)}</title>${grid}<path d="${path}" fill="none" stroke="#8edca0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${x(cleaned.length-1)}" cy="${y(cleaned[cleaned.length-1].value)}" r="5" fill="#e8c778" stroke="#0e1914" stroke-width="2"/><text x="${L}" y="${H-10}" fill="#8fa397" font-size="11">${x1}</text><text x="${W-R}" y="${H-10}" text-anchor="end" fill="#8fa397" font-size="11">${x2}</text><text x="${W-R}" y="${T+12}" text-anchor="end" fill="${delta>=0?'#8edca0':'#f08b84'}" font-size="12" font-weight="700">${delta>=0?'+':''}${fmt(pct,1)}%</text></svg><div class="chart-note">${cleaned.length} puntos · inicio ${silver(cleaned[0].value)} · último ${silver(cleaned[cleaned.length-1].value)} · ${esc(caption)}</div>`;
+}
+function parseHistoryTimestamp(raw){
+ if(raw instanceof Date)return raw.getTime();
+ if(typeof raw==='number'||(typeof raw==='string'&&/^\d{10,}$/.test(raw.trim()))){
+  const n=Number(raw);if(!Number.isFinite(n))return NaN;
+  // AODP market-history timestamps may be .NET ticks (100 ns since year 0001).
+  if(n>=621355968000000000)return (n-621355968000000000)/10000;
+  // Also accept Unix milliseconds and Unix seconds.
+  if(n>=1e12)return n;
+  if(n>=1e9)return n*1000;
+  return NaN;
+ }
+ return parseMarketDateMs(raw);
+}
+function parseHistoryRows(payload,id,city,quality){
+ const rows=Array.isArray(payload)?payload:(Array.isArray(payload?.data)?payload.data:[]);
+ const row=rows.find(r=>String(r.item_id??r.itemId??'')===id&&Number(r.quality??1)===Number(quality)&&normalizeMarketCity(r.location??r.city??'')===normalizeMarketCity(city));
+ const points=Array.isArray(row?.data)?row.data:[];
+ return points.map(p=>({ts:parseHistoryTimestamp(p.timestamp??p.time??p.date),avg_price:Number(p.avg_price??p.avgPrice??p.price),item_count:Number(p.item_count??p.itemCount??0)})).filter(p=>Number.isFinite(p.ts)&&p.ts>0&&Number.isFinite(p.avg_price)&&p.avg_price>0).sort((a,b)=>a.ts-b.ts);
+}
+function buildHistoryUrl(server,id,city,quality,days){
+ const end=new Date(),start=new Date(end.getTime()-days*86400000),date=start.toISOString().slice(0,10),endDate=end.toISOString().slice(0,10);
+ const params=new URLSearchParams({locations:city,qualities:String(quality),date,end_date:endDate,'time-scale':days<=7?'6':'24'});
+ return `https://${server}.albion-online-data.com/api/v2/stats/history/${encodeURIComponent(id)}.json?${params.toString()}`;
+}
+async function loadSelectedHistory(){
+ const id=$('historyItem').value;if(!id){setToolStatus('historyStatus','Selecciona un objeto de los resultados del scanner.','warn');return;}
+ const recipe=recipes.get(id);if(!recipe){setToolStatus('historyStatus','La receta ya no está disponible en el catálogo cargado.','error');return;}
+ if(historyAbort)historyAbort.abort();historyAbort=new AbortController();$('loadHistory').disabled=true;setToolStatus('historyStatus','Consultando historial comunitario…');
+ const settings=latestScanContext?.settings||getSettings(),selectedOption=$('historyItem').selectedOptions?.[0],quality=Number(selectedOption?.dataset?.quality)||settings.quality,city=$('historyCity').value,days=Number($('historyWindow').value)||30;
+ try{
+  const url=buildHistoryUrl(settings.server,id,city,quality,days),payload=await fetchJsonRetry(url,historyAbort.signal,historyCache,HISTORY_CACHE_TTL),points=parseHistoryRows(payload,id,city,quality);
+  drawLineChart('historySellChart',points,'avg_price','La API no devolvió historial para este objeto, calidad y ciudad.','Precio medio de órdenes de venta');
+  const snapshots=bmSnapshots.filter(s=>s.id===id&&s.server===settings.server&&Number(s.quality)===quality).map(s=>({ts:s.ts,bestBid:s.bestBid,quality:s.quality,bestBidQuality:s.bestBidQuality,eligibleQualities:s.eligibleQualities}));
+  drawLineChart('historyBmChart',snapshots,'bestBid','Aún no hay capturas BM guardadas. Ejecuta escaneos en distintos momentos para construir este historial.','Mejor precio comprador compatible BM');
+  setToolStatus('historyStatus',`${points.length} puntos históricos para ${recipe.name} · ${city} · Q${quality} · ${days} días. El gráfico BM contiene ${snapshots.length} capturas locales; el precio es el mejor bid compatible con la calidad simulada (puede provenir de una orden de calidad inferior).`,points.length?'ok':'warn');
+ }catch(error){if(error.name!=='AbortError')setToolStatus('historyStatus',`No se pudo consultar el historial: ${error.message}`,'error');}
+ finally{historyAbort=null;$('loadHistory').disabled=false;}
+}
+function cityFailureLabel(reason){
+ const labels={noBM:'Sin cotización BM ni profundidad',stale:'Precios demasiado antiguos',noDate:'Sin fecha verificable para el precio BM',depth:'La profundidad no cubre el lote',missingItemValue:'Falta Item Value para calcular tarifa de estación',missingMaterials:'Faltan cotizaciones de materiales',missing:'Datos incompletos'};
+ return labels[reason]||'No se pudo calcular';
+}
+function compareCitiesForSelectedItem(){
+ const id=$('cityCompareItem').value,recipe=recipes.get(id);if(!id||!recipe||!latestScanContext){$('cityCompareResults').innerHTML='<div class="empty">Ejecuta un escaneo completo y selecciona un objeto de sus resultados.</div>';return;}
+ const base=latestScanContext.settings,entries=CITIES.map(city=>{
+  const settings={...base,cityMode:city,requireFullDepth:false};
+  const result=candidateForRecipe(recipe,latestScanContext.priceMap,latestScanContext.bookMap,settings);
+  const variant=recipe.variants.find(v=>Number(v.focus)>0)||recipe.variants[0];
+  const rrrPercent=result&&!result.reason?result.rrrPercent:parseBonus(recipe,city,settings,variant)*100;
+  return {city,result,rrrPercent};
+ });
+ const valid=entries.filter(x=>x.result&&!x.result.reason).sort((a,b)=>b.result.batchProfit-a.result.batchProfit);
+ const invalid=entries.filter(x=>!x.result||x.result.reason);
+ const ordered=[...valid,...invalid];
+ if(!valid.length){$('cityCompareResults').innerHTML=`<div class="empty"><strong>No hay datos suficientes en ninguna ciudad.</strong>Se han comprobado las 7 ciudades. Revisa fechas, cotizaciones de materiales y libro BM.</div><div class="city-availability">${ordered.map(x=>`<div><strong>${esc(x.city)}</strong> · RRR ${fmt(x.rrrPercent,2)}% · ${esc(cityFailureLabel(x.result?.reason))}</div>`).join('')}</div>`;return;}
+ const best=valid[0];
+ const bestFull=valid.filter(x=>x.result.depthAvailable&&x.result.depthComplete).sort((a,b)=>b.result.batchProfit-a.result.batchProfit)[0]||null;
+ const rows=ordered.map((entry,index)=>{
+  const r=entry.result;
+  if(!r||r.reason){const missingInfo=r?.reason==='missingMaterials'&&r.missingMaterials?.length?`<small class="missing-material-detail">IDs sin cotización: ${esc(r.missingMaterials.slice(0,8).join(', '))}${r.missingMaterials.length>8?'…':''}</small>`:'';return `<tr class="city-missing"><td>—</td><td><strong>${esc(entry.city)}</strong><br><small>RRR ${fmt(entry.rrrPercent,2)}%</small></td><td colspan="9"><span class="pill warn">${esc(cityFailureLabel(r?.reason))}</span>${missingInfo}</td></tr>`;}
+  return `<tr class="${index===0?'best-city':''}"><td>${index===0?'<span class="best-mark">★ Mejor</span>':index+1}</td><td><strong>${esc(entry.city)}</strong><br><small>RRR ${fmt(r.rrrPercent,2)}%</small></td><td>${silver(r.materialUnitCost)}</td><td><div class="source-chips">${(r.sourceCities||[]).map(c=>`<span class="source-chip">${esc(c)}</span>`).join('')||'—'}</div></td><td>${silver(r.sourceTransportTotal||0)}</td><td>${silver(r.finishedTransportTotal||0)}</td><td>${silver(r.riskReserveTotal||0)}</td><td>${silver(r.costUnit)}</td><td class="${r.batchProfit>=0?'profit':'loss'}">${silver(r.batchProfit)}</td><td>${r.roi==null?'—':fmt(r.roi,1)+'%'}</td><td>${r.depthAvailable?`${fmt(r.coveragePct,0)}%`:'Estimación sin profundidad'}</td></tr>`;
+ }).join('');
+ const bestBmStatus=best.result.depthAvailable?(best.result.depthComplete?'Profundidad completa':`Profundidad parcial · ${fmt(best.result.coveragePct,0)}%`):'Solo cotización agregada';
+ const mobileCards=ordered.map((entry,index)=>{
+  const r=entry.result;
+  if(!r||r.reason)return `<article class="city-compare-card missing"><div class="city-card-head"><strong>${esc(entry.city)}</strong><span class="city-card-rank">RRR ${fmt(entry.rrrPercent,2)}%</span></div><div class="city-card-reason">${esc(cityFailureLabel(r?.reason))}</div></article>`;
+  const rank=index===0?'★ Mejor':String(index+1);
+  const depth=r.depthAvailable?`${fmt(r.quantityFilled)}/${fmt(r.producedQty)} · ${fmt(r.coveragePct,0)}%`:'Sin libro';
+  return `<article class="city-compare-card ${index===0?'best':''}"><div class="city-card-head"><strong>${esc(entry.city)}</strong><span class="city-card-rank">${rank} · RRR ${fmt(r.rrrPercent,2)}%</span></div><div class="city-card-metrics"><div><span>Materiales / unidad</span><strong>${silver(r.materialUnitCost)}</strong></div><div><span>Coste total / unidad</span><strong>${silver(r.costUnit)}</strong></div><div><span>Transporte materiales</span><strong>${silver(r.sourceTransportTotal||0)}</strong></div><div><span>Transporte a Caerleon</span><strong>${silver(r.finishedTransportTotal||0)}</strong></div><div><span>Reserva de riesgo</span><strong>${silver(r.riskReserveTotal||0)}</strong></div><div><span>Beneficio del lote</span><strong class="${r.batchProfit>=0?'profit':'loss'}">${silver(r.batchProfit)}</strong></div><div><span>ROI del lote</span><strong>${r.roi==null?'—':fmt(r.roi,1)+'%'}</strong></div><div><span>Cobertura BM</span><strong>${depth}</strong></div></div><div class="city-card-sources">${(r.sourceCities||[]).map(city=>`<span class="source-chip">${esc(city)}</span>`).join('')||'<span class="source-chip">Sin ciudad de origen</span>'}</div></article>`;
+ }).join('');
+ $('cityCompareResults').innerHTML=`<div class="compare-summary"><span>Mayor beneficio simulado: <strong>${esc(best.city)}</strong></span>${bestFull?`<span>Mejor con cobertura completa: <strong>${esc(bestFull.city)}</strong> · ${silver(bestFull.result.batchProfit)}</span>`:''}<span>Beneficio del lote: <strong class="${best.result.batchProfit>=0?'profit':'loss'}">${silver(best.result.batchProfit)}</strong></span><span>Ciudades calculables: <strong>${valid.length}/7</strong></span><span>Especialidad de la receta: <strong>${esc(recipe.city||'No identificada')}</strong></span><span>Mercado BM: <strong>${esc(bestBmStatus)}</strong></span></div><div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>Ranking</th><th>Ciudad / RRR</th><th>Materiales / u.</th><th>Ciudades de compra</th><th>Transporte materiales</th><th>Producto → Caerleon</th><th>Reserva riesgo</th><th>Coste / u.</th><th>Beneficio lote</th><th>ROI</th><th>Cobertura BM</th></tr></thead><tbody>${rows}</tbody></table></div><div class="city-compare-cards">${mobileCards}</div><p class="footnote">Se muestran siempre las siete ciudades. Las que no tienen datos suficientes no desaparecen: se indica el motivo. Los costes de transporte y la reserva de riesgo son los valores manuales configurados. La reserva no es una probabilidad de muerte ni una ruta calculada. Beneficio del lote = ingresos de las unidades cubiertas menos el coste de toda la producción y los costes configurados.</p>`;
+}
+function addWatchItemFromId(id){
+ const recipe=recipes.get(id);if(!recipe)return;
+ const settings=latestScanContext?.settings||getSettings(),quality=settings.quality;
+ const existing=watchlist.find(w=>w.id===id&&w.server===settings.server&&Number(w.quality)===quality);
+ if(existing){setWatchStatus(`${recipe.name} ya está en seguimiento. Ajusta su umbral en la lista.`,'warn');return;}
+ if(watchlist.length>=WATCHLIST_MAX){setWatchStatus(`La lista admite un máximo de ${WATCHLIST_MAX} objetos.`,'error');return;}
+ const minProfit=Math.max(0,Number($('watchThreshold').value)||0);
+ watchlist.push({id,name:recipe.name,quality,server:settings.server,minProfit,addedAt:Date.now(),lastProfit:null,lastROI:null,lastCoverage:null,lastChecked:null,aboveThreshold:false,alertAt:null});saveWatchlist();renderWatchlist();setWatchStatus(`${recipe.name} añadido. Umbral: ${silver(minProfit)} por unidad producida.`,'ok');
+}
+function renderWatchlist(){
+ const host=$('watchlistResults');if(!host)return;
+ if(!watchlist.length){host.innerHTML='<div class="empty"><strong>Aún no sigues ningún objeto</strong>En el ranking, abre «Desglose» y pulsa «＋ Seguir» en los objetos que quieras vigilar.</div>';return;}
+ host.innerHTML=watchlist.map(w=>{const alert=w.aboveThreshold&&w.lastProfit!=null&&w.lastProfit>=w.minProfit;const icon=`https://render.albiononline.com/v1/item/${encodeURIComponent(w.id)}.png?quality=${Number(w.quality)||1}`;return `<article class="watch-item ${alert?'is-alert':''}"><div class="watch-item-main"><img loading="lazy" src="${icon}" alt=""><div><strong>${esc(w.name||w.id)}</strong><small>${esc(w.id)} · ${String(w.server).toUpperCase()} · Q${w.quality}</small>${alert?'<span class="watch-alert">● Umbral alcanzado con profundidad completa</span>':''}</div></div><div class="watch-metric"><span>Beneficio neto / unidad</span><strong class="${Number(w.lastProfit)>=0?'profit':'loss'}">${w.lastProfit==null?'Sin comprobar':silver(w.lastProfit)}</strong></div><div class="watch-metric"><span>Tu umbral / unidad</span><strong>${silver(w.minProfit)}</strong></div><div class="watch-metric"><span>ROI / cobertura</span><strong>${w.lastROI==null?'—':fmt(w.lastROI,1)+'%'} · ${w.lastCoverage==null?'—':fmt(w.lastCoverage,0)+'%'}</strong></div><div class="watch-actions"><button class="small-btn" data-watch-threshold="${esc(w.id)}" data-server="${esc(w.server)}" data-quality="${w.quality}">Umbral</button><button class="small-btn remove" data-watch-remove="${esc(w.id)}" data-server="${esc(w.server)}" data-quality="${w.quality}">Quitar</button></div></article>`;}).join('');
+}
+async function enableBrowserNotifications(){
+ if(!('Notification'in window)){setWatchStatus('Este navegador no ofrece notificaciones web. Las alertas seguirán visibles dentro de Albion Scan.','warn');return;}
+ try{const permission=await Notification.requestPermission();setWatchStatus(permission==='granted'?'Notificaciones activadas. Solo se avisará cuando un objeto cruce su umbral con profundidad BM completa.':`Permiso de notificaciones: ${permission}. Las alertas seguirán visibles dentro de la app.`,permission==='granted'?'ok':'warn');}catch(error){setWatchStatus(`No se pudo activar la notificación: ${error.message}`,'error');}
+}
+function notifyWatchThreshold(w,current){
+ const message=`${w.name}: ${silver(current.profit)} por unidad · ROI ${fmt(current.roi??0,1)}% · cobertura BM completa.`;
+ if('Notification'in window&&Notification.permission==='granted'){try{new Notification('Albion Scan · oportunidad detectada',{body:message,tag:`asm-${w.id}-${w.quality}`});}catch(error){console.warn('Notificación no disponible',error);}}
+}
+async function refreshWatchlist(){
+ if(scanAbort){setWatchStatus('Termina o cancela el escaneo actual antes de comprobar el seguimiento.','warn');return;}
+ if(!watchlist.length){setWatchStatus('Añade objetos al seguimiento desde los resultados.','warn');return;}
+ const settings=getSettings(),active=watchlist.filter(w=>w.server===settings.server),foreign=watchlist.length-active.length;
+ if(!active.length){setWatchStatus(`No hay objetos guardados para ${settings.server.toUpperCase()}. Cambia el servidor del scanner para comprobarlos.`,'warn');return;}
+ const watchedRecipes=active.map(w=>({watch:w,recipe:recipes.get(w.id)})).filter(x=>x.recipe);
+ if(!watchedRecipes.length){setWatchStatus('No se encontraron las recetas guardadas. Actualiza la base de recetas.','error');return;}
+ const allIds=[...new Set(watchedRecipes.flatMap(x=>[x.recipe.id,...x.recipe.variants.flatMap(v=>v.materials.map(m=>m.id))]))];
+ const maxWatchQuality=Math.max(1,...active.map(w=>Number(w.quality)||1));const qualities=Array.from({length:maxWatchQuality},(_,i)=>i+1);const batches=idBatches(allIds,70),bookGroups=new Map();for(const w of active){const q=Number(w.quality)||1;if(!bookGroups.has(q))bookGroups.set(q,[]);bookGroups.get(q).push(w.id);}
+ const priceMap=new Map(),bookMap=new Map();scanAbort=new AbortController();$('refreshWatchlist').disabled=true;setWatchStatus('Comprobando materiales y órdenes BM de tu lista…');
+ try{
+  const locations=[...CITIES,'Black Market'];
+  for(let i=0;i<batches.length;i++){const url=getPriceUrl(settings.server,batches[i],locations,qualities);const data=await fetchJsonRetry(url,scanAbort.signal,priceCache,PRICE_CACHE_TTL);const priceCheck=addPrices(priceMap,data);priceRowsAccepted+=priceCheck.accepted;priceRowsRejected+=priceCheck.rejected;setWatchStatus(`Precios de seguimiento: bloque ${i+1}/${batches.length}.`);if(i<batches.length-1)await sleep(REQUEST_DELAY_MS,scanAbort.signal);}
+  let bookDone=0,bookTotal=[...bookGroups.values()].reduce((n,ids)=>n+idBatches([...new Set(ids)],45).length,0);
+  for(const [quality,idsRaw] of bookGroups){const ids=[...new Set(idsRaw)],bb=idBatches(ids,45);for(let i=0;i<bb.length;i++){const eligibleQualities=Array.from({length:quality},(_,q)=>q+1);const url=getOrderbookUrl(settings.server,bb[i],['Black Market'],eligibleQualities);const data=await fetchJsonRetry(url,scanAbort.signal,orderbookCache,ORDERBOOK_CACHE_TTL);bookRowsAccepted+=addOrderBooks(bookMap,data,null);bookDone++;setWatchStatus(`Profundidad BM de seguimiento: ${bookDone}/${bookTotal}.`);if(bookDone<bookTotal)await sleep(REQUEST_DELAY_MS,scanAbort.signal);}}
+  let triggered=0,checked=0;
+  for(const {watch,recipe} of watchedRecipes){const s={...settings,quality:Number(watch.quality)||settings.quality,cityMode:'auto',requireFullDepth:false};const current=candidateForRecipe(recipe,priceMap,bookMap,s);watch.lastChecked=Date.now();
+   if(current&&!current.reason){const qualifies=current.depthAvailable&&current.depthComplete&&current.profit>=Number(watch.minProfit||0);const wasAbove=!!watch.aboveThreshold;watch.lastProfit=current.profit;watch.lastROI=current.roi;watch.lastCoverage=current.coveragePct;watch.lastCity=current.city;watch.lastDepthComplete=current.depthComplete;watch.aboveThreshold=qualifies;if(qualifies&&!wasAbove){notifyWatchThreshold(watch,current);watch.alertAt=Date.now();triggered++;}checked++;}
+   else{watch.lastProfit=null;watch.lastROI=null;watch.lastCoverage=null;watch.lastDepthComplete=false;watch.aboveThreshold=false;watch.lastReason=current?.reason||'missing';}
+  }
+  saveWatchlist();renderWatchlist();setWatchStatus(`Seguimiento actualizado: ${checked}/${watchedRecipes.length} objetos con datos calculables · ${triggered} nuevas alertas.${foreign?` ${foreign} objetos pertenecen a otro servidor.`:''}`,triggered?'ok':'');
+ }catch(error){if(error.name!=='AbortError')setWatchStatus(`Error al comprobar seguimiento: ${error.message}`,'error');else setWatchStatus('Comprobación cancelada.','warn');}
+ finally{scanAbort=null;$('refreshWatchlist').disabled=false;}
+}
+function handleToolClicks(event){
+ const watch=event.target.closest('[data-watch-id]');if(watch){addWatchItemFromId(watch.dataset.watchId);return;}
+ const remove=event.target.closest('[data-watch-remove]');if(remove){watchlist=watchlist.filter(w=>!(w.id===remove.dataset.watchRemove&&w.server===remove.dataset.server&&String(w.quality)===String(remove.dataset.quality)));saveWatchlist();renderWatchlist();setWatchStatus('Objeto eliminado del seguimiento.');return;}
+ const threshold=event.target.closest('[data-watch-threshold]');if(threshold){const w=watchlist.find(x=>x.id===threshold.dataset.watchThreshold&&x.server===threshold.dataset.server&&String(x.quality)===String(threshold.dataset.quality));if(!w)return;const value=prompt(`Nuevo beneficio mínimo por unidad para ${w.name} (silver):`,String(w.minProfit));if(value!==null&&Number.isFinite(Number(value))&&Number(value)>=0){w.minProfit=Number(value);w.aboveThreshold=false;saveWatchlist();renderWatchlist();setWatchStatus(`Umbral actualizado para ${w.name}.`,'ok');}return;}
+}
+/* ========================= PRO 9.0: BACKUP, DATA HEALTH & RECOVERY ========================= */
+function updateDataHealth(){
+ const server=$('server')?.value||'west';$('healthServer').textContent=server.toUpperCase();
+ $('healthWatch').textContent=fmt(watchlist.length);$('healthSnapshots').textContent=fmt(bmSnapshots.length);
+ let last=0;try{last=Number(localStorage.getItem('asm_pro_10_3_1_last_scan')||localStorage.getItem('asm_pro_10_1_last_scan')||localStorage.getItem('asm_pro_9_0_last_scan')||localStorage.getItem('asm_pro_8_0_last_scan')||0);}catch{}$('healthScan').textContent=last?new Date(last).toLocaleString('es-ES'):'Todavía no';
+}
+function exportBackup(){
+ const payload={app:'Albion Scan Market',version:'10.3.1',exportedAt:new Date().toISOString(),settings:(()=>{const v={};for(const id of SETTING_IDS){const el=$(id);v[id]=el.type==='checkbox'?el.checked:el.value;}return v;})(),watchlist,bmSnapshots};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`albion-scan-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+ setToolStatus('dataStatus',`Copia exportada: ${watchlist.length} objetos seguidos y ${bmSnapshots.length} capturas BM. La base de recetas se puede volver a descargar.`,'ok');
+}
+async function importBackup(file){
+ if(!file)return;
+ try{
+  if(file.size>5*1024*1024)throw new Error('El archivo supera el límite de 5 MB.');
+  const payload=JSON.parse(await file.text());if(!payload||payload.app!=='Albion Scan Market'||!['7.0','8.0','9.0','10.0','10.1','10.2','10.3','10.3.1'].includes(String(payload.version)))throw new Error('El archivo no es una copia compatible de Albion Scan Market 7.0/8.0/9.0/10.0/10.1/10.2.');
+  if(payload.settings&&typeof payload.settings==='object'){
+   for(const id of SETTING_IDS){if(payload.settings[id]===undefined)continue;const el=$(id);if(el.type==='checkbox')el.checked=!!payload.settings[id];else if(el.tagName==='SELECT'||el.tagName==='INPUT')el.value=String(payload.settings[id]);}   saveSettings();updateRrrControls();updateFilterUI();$('sourceTransportPerCity').disabled=$('materialSourceMode').value!=='cheapest';
+  }
+  if(Array.isArray(payload.watchlist)){watchlist=payload.watchlist.filter(w=>w&&validItemId(w.id)&&['west','europe','east'].includes(w.server)&&Number.isFinite(Number(w.quality))&&Number(w.quality)>=1&&Number(w.quality)<=5).slice(-WATCHLIST_MAX);saveWatchlist();renderWatchlist();}
+  if(Array.isArray(payload.bmSnapshots)){bmSnapshots=payload.bmSnapshots.filter(x=>x&&validItemId(x.id)&&['west','europe','east'].includes(x.server)&&Number(x.bestBid)>0&&Number(x.ts)>0).slice(-BM_SNAPSHOT_MAX);try{localStorage.setItem(BM_SNAPSHOT_KEY,JSON.stringify(bmSnapshots));}catch(error){throw new Error('No hay espacio local suficiente para restaurar las capturas.');}}
+  updateDataHealth();setToolStatus('dataStatus',`Copia restaurada correctamente · ${watchlist.length} objetos seguidos · ${bmSnapshots.length} capturas BM.`,'ok');
+ }catch(error){setToolStatus('dataStatus',`No se pudo importar la copia: ${error.message}`,'error');}
+ finally{$('importBackup').value='';}
+}
+function setIntegrityBanner(){
+ const banner=$('integrityBanner');if(!banner)return;
+ const fullDepth=$('requireFullDepth')?.checked!==false,strictDates=$('strictDates')?.checked!==false;
+ const maxAge=Number($('maxAge')?.value)||24,quality=Number($('quality')?.value)||1;
+ const depthText=fullDepth?'se exige cobertura completa del lote en el BM':'modo exploración: se permiten lotes con cobertura parcial o estimación agregada';
+ const dateText=strictDates?'solo se aceptan precios con fecha verificable':`se permiten precios sin fecha, pero no fechas futuras; antigüedad máxima ${fmt(maxAge)} h`;
+ banner.innerHTML=`<strong>PRO 10.3 · control de integridad.</strong> ${depthText}. Materiales: ${dateText}. Calidad: se supone que el 100% del lote sale Q${quality}; no es una garantía de crafting.`;
+ banner.className='status '+(fullDepth&&strictDates?'warn':'warn');
+}
+setIntegrityBanner();
+$('exportBackup').addEventListener('click',exportBackup);
+$('importBackup').addEventListener('change',event=>importBackup(event.target.files?.[0]));
+$('clearLocalHistory').addEventListener('click',()=>{if(!confirm('¿Borrar todas las capturas históricas BM guardadas en este navegador? Esta acción no se puede deshacer.'))return;bmSnapshots=[];try{localStorage.removeItem(BM_SNAPSHOT_KEY);}catch{}updateDataHealth();setToolStatus('dataStatus','Historial BM local borrado. La lista de seguimiento y la configuración se conservaron.','ok');});
+window.addEventListener('error',event=>{console.error('Error no controlado en Albion Scan',event.error||event.message);const status=$('status');if(status)setStatus('Se produjo un error inesperado. Revisa la consola del navegador y vuelve a intentar.','error');});
+window.addEventListener('unhandledrejection',event=>{console.error('Promesa no controlada en Albion Scan',event.reason);});
+$('results').addEventListener('click',event=>{const button=event.target.closest('[data-detail]');if(button){const target=$(button.dataset.detail);if(!target)return;const show=target.hidden;target.hidden=!show;button.setAttribute('aria-expanded',String(show));button.textContent=show?'Ocultar':'Desglose';return;}handleToolClicks(event);});
+$('cityCompareResults').addEventListener('click',handleToolClicks);
+$('watchlistResults').addEventListener('click',handleToolClicks);
+$('runCityCompare').addEventListener('click',compareCitiesForSelectedItem);
+$('loadHistory').addEventListener('click',loadSelectedHistory);
+$('refreshWatchlist').addEventListener('click',refreshWatchlist);
+$('enableNotifications').addEventListener('click',enableBrowserNotifications);
+
+$('loadRecipes').addEventListener('click',()=>loadRecipes(true));
+$('runScan').addEventListener('click',runScan);
+$('cancelScan').addEventListener('click',()=>{if(scanAbort){scanCancelled=true;scanAbort.abort();$('cancelScan').disabled=true;setStatus('Cancelando escaneo…');}});
+$('exportCsv').addEventListener('click',()=>{
+ if(!scanRows.length)return;
+ const headers=['Posicion','ID','Objeto','Ciudad_fabricacion','Ciudades_compra_materiales','Ciudades_externas','Coste_transporte_fuentes','Valor_materiales_expuestos_ruta_fuente','Transporte_producto_Caerleon','Valor_producto_expuesto_ruta_Caerleon','Base_reserva_riesgo','Reserva_riesgo_transporte','Calidad','Cantidad_objetivo','Cantidad_producida','Cantidad_cubierta_BM','Cobertura_BM_pct','Profundidad_BM_abierta_observada_unidades','Precio_mejor_BM','Precio_medio_BM_lote','Coste_materiales_unidad','Coste_estacion_unidad','Coste_receta_unidad','Coste_foco_unidad','Otros_costes_unidad','Coste_total_unidad','Coste_total_lote','Ingreso_neto_BM','Beneficio_unidad','Beneficio_lote_inmediato','ROI_lote_pct','Precio_BM_equilibrio','Beneficio_escenario_BM_menos10_material_mas10','RRR_porcentaje','Confianza_datos','Hipotesis_calidad_100pct','Calidades_BM_consultadas','Mejor_bid_calidad_minima','Edad_cotizacion_BM_horas','Edad_captura_local_libro_BM_min','Item_Value','Tarifa_estacion_100_nutricion','Edad_dato_horas','Material_ID','Cantidad_original','Cantidad_efectiva','Retornable','Precio_material','Subtotal_material'];
+ const rows=[headers];scanRows.forEach((r,i)=>{for(const m of r.materials){rows.push([i+1,r.id,r.name,r.city,(r.sourceCities||[]).join('|'),(r.crossCitySources||[]).join('|'),r.sourceTransportTotal??0,r.sourceMaterialValueExposed??0,r.finishedTransportTotal??0,r.finishedCargoValueExposed??0,r.riskBase??0,r.riskReserveTotal??0,r.quality,r.targetQty,r.producedQty,r.quantityFilled,r.coveragePct??'',r.availableDepth??'',r.bmPrice,r.depthAvailable?r.avgSalePrice:'',r.materialUnitCost,r.stationFeePerUnit,r.recipeSilverPerUnit,r.focusCostPerUnit,r.otherCost??'',r.costUnit,r.totalCost,r.netRevenue,r.profit,r.batchProfit,r.roi??'',r.breakEvenBmPrice??'',r.stressProfit??'',r.rrrPercent,r.dataConfidence,r.qualityAssumption,(r.bookQualitiesSeen||[]).join('|'),r.bestBidQuality??'',r.bmQuoteAgeHours??'',r.bookCaptureAgeMinutes??'',r.stationItemValue??'',r.stationFeeRate,r.maxAgeHours,m.id,m.qty,m.effectiveQty,m.returns?'Sí':'No',m.unitPrice,m.subtotal]);}});
+ const csv='\uFEFF'+rows.map(row=>row.map(value=>'"'+String(value??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='albion-scan-market-pro-10-2-ranking.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1200);
+});
+$('familyFilter').addEventListener('change',()=>{pendingBranchFilter=null;$('branchFilter').value='all';updateFilterUI();invalidateFilteredResults();saveSettings();});
+$('branchFilter').addEventListener('change',()=>{updateFilterUI();invalidateFilteredResults();saveSettings();});
+for(const id of SETTING_IDS){$(id).addEventListener('change',()=>{if(id==='rrrMode')updateRrrControls();if(['maxAge','strictDates','requireFullDepth','quality'].includes(id))setIntegrityBanner();if(id!=='familyFilter'&&id!=='branchFilter')saveSettings();});$(id).addEventListener('input',saveSettings);}
+$('city').addEventListener('change',()=>{$('cityHint').textContent=$('city').value==='auto'?'Evalúa las 7 ciudades de fabricación y escoge la mejor según el lote.':`La clasificación principal se limita a ${$('city').value}; el laboratorio puede comparar las 7 ciudades.`;});
+$('materialSourceMode').addEventListener('change',()=>{const cheapest=$('materialSourceMode').value==='cheapest';$('sourceTransportPerCity').disabled=!cheapest;saveSettings();});
+
+const transportInputIds=['cargoWeightKg','cargoValueSilver','oxCapacityKg','loadSafetyPct','tripMinutes','tripCostSilver','lethalSharePct','deathChancePct','oxGearValue'];
+function calculateTransport(){
+ const v=id=>Math.max(0,Number($(id).value)||0);
+ const weight=v('cargoWeightKg'),value=v('cargoValueSilver'),capacity=v('oxCapacityKg'),safe=Math.min(100,Math.max(10,v('loadSafetyPct')))/100;
+ const minutes=v('tripMinutes'),cost=v('tripCostSilver'),lethal=Math.min(100,v('lethalSharePct'))/100,death=Math.min(100,v('deathChancePct'))/100,gear=v('oxGearValue');
+ const usable=capacity*safe,trips=weight>0&&usable>0?Math.ceil(weight/usable):0;
+ const totalMinutes=trips*minutes,direct=trips*cost;
+ const perTripDeath=lethal*death,accumulated=trips?1-Math.pow(1-perTripDeath,trips):0;
+ const expectedCargoLoss=value*perTripDeath;
+ const expectedGearLoss=gear*perTripDeath*trips;
+ const expectedLoss=expectedCargoLoss+expectedGearLoss,total=direct+expectedLoss;
+ $('transportTrips').textContent=trips?String(trips):'Introduce peso';
+ $('transportTime').textContent=trips?`${Math.floor(totalMinutes/60)} h ${totalMinutes%60} min`:'—';
+ $('transportDirectCost').textContent=Math.round(direct).toLocaleString('es-ES')+' S';
+ $('transportDeathRisk').textContent=trips?(accumulated*100).toFixed(2).replace('.',',')+'% acumulado':'—';
+ $('transportExpectedLoss').textContent=Math.round(expectedLoss).toLocaleString('es-ES')+' S';
+ $('transportTotalCost').textContent=Math.round(total).toLocaleString('es-ES')+' S';
+ $('transportCaveat').textContent=trips?`Modelo esperado: carga ${Math.round(value).toLocaleString('es-ES')} S; capacidad útil ${Math.round(usable).toLocaleString('es-ES')} kg/viaje; ${trips} viaje(s). El riesgo acumulado representa al menos una pérdida; la reserva suma pérdidas esperadas de carga y buey/equipo. Es una aproximación basada en probabilidades introducidas por ti.`:'Introduce el peso total del lote para calcular viajes. La capacidad del buey T7 normal se toma como aprox. 2.667 kg; bolsa, personaje y calidad pueden modificar la capacidad efectiva.';
+ return {trips,totalMinutes,direct,expectedLoss,total,value};
+}
+transportInputIds.forEach(id=>$(id).addEventListener('input',calculateTransport));
+$('applyTransportEstimate').addEventListener('click',()=>{const r=calculateTransport();$('finishedTransportPerBatch').value=Math.round(r.direct);$('transportRiskPct').value=r.value>0?Math.min(100,r.expectedLoss/r.value*100).toFixed(2):'0';saveSettings();$('status').textContent='Coste directo y reserva de riesgo estimados aplicados. Revisa el desglose antes de confiar en el ranking.';});
+calculateTransport();
+
+restoreSettings();
+calculateTransport();
+setIntegrityBanner();
+$('sourceTransportPerCity').disabled=$('materialSourceMode').value!=='cheapest';
+renderWatchlist();
+updateDataHealth();
+if(!restoreRecipeCache())loadRecipes();else updateFilterUI();
+</script>
+</body>
+</html>
